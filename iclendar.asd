@@ -14,6 +14,7 @@
   :serial T
   :components ((:file "package")
                (:file "block")
+               (:file "standard-types")
                (:file "standard-blocks")
                (:file "documentation"))
   :depends-on (:closer-mop
