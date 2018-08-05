@@ -7,22 +7,22 @@
 (in-package #:org.shirakumo.iclendar)
 
 (defclass block-class (standard-class)
-  ((name :initarg :name :reader name)))
+  ((identifier :initarg :identifier :reader identifier)))
 
 (defmethod c2mop:validate-superclass ((class block-class) (super standard-class)) T)
 (defmethod c2mop:validate-superclass ((class block-class) (super block-class)) T)
 (defmethod c2mop:validate-superclass ((class standard-class) (super block-class)) NIL)
 
 (defclass property-definition (c2mop:standard-slot-definition)
-  ((name :initarg :name :reader name)
+  ((identifier :initarg :identifier :reader identifier)
    (requirement :initarg :requirement :reader requirement)))
 
 (defclass direct-property-definition (c2mop:standard-direct-slot-definition property-definition)
   ())
 
-(defmethod initialize-instance :after ((slot direct-property-definition) &key (name NIL name-p) requirement)
-  (declare (ignore name))
-  (unless name-p (error "NAME required."))
+(defmethod initialize-instance :after ((slot direct-property-definition) &key (identifier NIL i-p) requirement)
+  (declare (ignore identifier))
+  (unless i-p (error "IDENTIFIER required for ~s" (c2mop:slot-definition-name slot)))
   (unless requirement (setf (slot-value slot 'requirement) :optional)))
 
 (defclass effective-property-definition (c2mop:standard-effective-slot-definition property-definition)
@@ -36,16 +36,16 @@
   (declare (ignore args))
   (find-class 'effective-property-definition))
 
-(defmethod c2mop:compute-effective-slot-definition ((class block-class) name direct-slots)
+(defmethod c2mop:compute-effective-slot-definition ((class block-class) identifier direct-slots)
   (let ((effective-slot (call-next-method)))
     (dolist (direct-slot direct-slots)
-      (flet ((copy-slot (name)
-               (setf (slot-value effective-slot name)
-                     (slot-value direct-slot name))))
+      (flet ((copy-slot (identifier)
+               (setf (slot-value effective-slot identifier)
+                     (slot-value direct-slot identifier))))
         (when (and (typep direct-slot 'direct-property-definition)
                    (eql (c2mop:slot-definition-name direct-slot)
                         (c2mop:slot-definition-name effective-slot)))
-          (copy-slot 'name)
+          (copy-slot 'identifier)
           (copy-slot 'requirement)
           (return))))
     effective-slot))
@@ -57,15 +57,33 @@
 (defmethod check-properties-valid ((block block))
   (dolist (slot (c2mop:class-slots (class-of block)))
     (when (typep slot 'effective-property-definition)
-      (let ((value (slot-value block (c2mop:slot-definition-name slot))))
-        (etypecase (requirement slot)
-          ((eql :required) (check-type value (and (not null) (not cons))))
-          ((eql :optional) (check-type value (or null (not cons))))
-          ((eql :multiple) (check-type value list))
-          (symbol (when value
-                    (assert (slot-value block (requirement slot)))))
-          (cons (when value
-                  (assert (null (slot-value block (second (requirement slot))))))))))))
+      (let ((value (slot-value block (c2mop:slot-definition-name slot)))
+            (initarg (first (c2mop:slot-definition-initargs slot))))
+        (flet ((check-slot-value (value default)
+                 (let ((type (or (c2mop:slot-definition-type slot) default)))
+                   (unless (typep value type)
+                     (error "The value ~s for ~s is not of type ~s." value initarg type)))))
+          (etypecase (requirement slot)
+            ((eql :required)
+             (check-slot-value value '(not null)))
+            ((eql :optional)
+             (when value
+               (check-slot-value value '(not cons))))
+            ((eql :multiple)
+             (dolist (item value)
+               (check-slot-value item T)))
+            (symbol
+             (when value
+               (unless (slot-value block (requirement slot))
+                 (error "The parameter ~s requires ~s to be set as well."
+                        initarg (requirement slot)))
+               (check-slot-value value T)))
+            (cons
+             (when value
+               (when (slot-value block (second (requirement slot)))
+                 (error "The parameter ~s does not allow ~s to be set as well."
+                        initarg (second (requirement slot))))
+               (check-slot-value value T)))))))))
 
 (defmethod shared-initialize :after ((block block) slots &key)
   (declare (ignore slots))
