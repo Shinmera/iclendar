@@ -1,0 +1,126 @@
+#|
+ This file is a part of iclendar
+ (c) 2018 Shirakumo http://tymoon.eu (shinmera@tymoon.eu)
+ Author: Nicolas Hafner <shinmera@tymoon.eu>
+|#
+
+(in-package #:org.shirakumo.iclendar)
+
+(define-block calendar ()
+    ((components :requirement :multiple)
+     (method :name "METHOD" :requirement :optional)
+     (product :name "PRODID" :requirement :required)
+     (scale :name "CALSCALE" :requirement :optional)
+     (version :name "VERSION" :requirement :required))
+  (:name . "VCALENDAR"))
+
+(define-block component ()
+    ((extensions :requirement :multiple)
+     (iana :requirement :multiple)))
+
+(define-block calendar-component (component)
+    ((attendees :name "ATTENDEE" :requirement :multiple)
+     (comments :name "COMMENT" :requirement :multiple)
+     (request-status :name "REQUEST-STATUS" :requirement :multiple)
+     (stamp :name "DTSTAMP" :requirement :required)
+     (start :name "DTSTART" :requirement (not method))
+     (uid :name "UID" :requirement :required)
+     (url :name "URL" :requirement :optional)))
+
+(define-block date-component (calendar-component)
+    ((attachments :name "ATTACH" :requirement :multiple)
+     (categories :name "CATEGORIES" :requirement :multiple)
+     (class :name "CLASS" :requirement :optional)
+     (contacts :name "CONTACT" :requirement :multiple)
+     (created :name "CREATED" :requirement :optional)
+     (exception-dates :name "EXDATE" :requirement :multiple)
+     (last-modification :name "LAST-MODIFIED" :requirement :optional)
+     (organizer :name "ORGANIZER" :requirement :optional)
+     (recurrence-dates :name "RDATE" :requirement :multiple)
+     (recurrence :name "RECURRENCE-ID" :requirement :optional)
+     (related :name "RELATED-TO" :requirement :optional)
+     (resources :name "RESOURCES" :requirement :multiple)
+     (recurrence-rule :name "RRULE" :requirement :optional)
+     (sequence-number :name "SEQUENCE" :requirement :optional)
+     (status :name "STATUS" :requirement :optional)
+     (summary :name "SUMMARY" :requirement :optional)))
+
+(define-block task-component (date-component)
+    ((description :name "DESCRIPTION" :requirement :optional)
+     (duration :name "DURATION" :requirement :optional)
+     (geographic-location :name "GEO" :requirement :optional)
+     (location :name "LOCATION" :requirement :optional)
+     (priority :name "PRIORITY" :requirement :optional)))
+
+(define-block event (task-component)
+    ((end :name "DTEND" :requirement (not duration))
+     (duration :name "DURATION" :requirement (not end))
+     (transparency :name "TRANSP" :requirement :optional))
+  (:name . "VEVENT"))
+
+(define-block todo (task-component)
+    ((completed :name "COMPLETED" :requirement :optional)
+     (completeness :name "PERCENT-COMPLETE" :requirement :optional)
+     (due :name "DUE" :requirement (not duration))
+     (duration :name "DURATION" :requirement (not due)))
+  (:name . "VTODO"))
+
+(define-block journal (date-component)
+    ()
+  (:name . "VJOURNAL"))
+
+(define-block free/busy (calendar-component)
+    ((contact :name "CONTACT" :requirement :optional)
+     (end :name "DTEND" :requirement :optional)
+     (free/busy :name "FREEBUSY" :requirement :multiple)
+     (organizer :name "ORGANIZER" :requirement :optional))
+  (:name . "VFREEBUSY"))
+
+(define-block time-zone (component)
+    ((tzid :name "TZID" :requirement :required)
+     (last-modification :name "LAST-MODIFIED" :requirement :optional)
+     (tzurl :name "TZURL" :requirement :optional)
+     (components :requirement :multiple))
+  (:name . "VTIMEZONE"))
+
+(define-block alarm (component)
+    ((action :name "ACTION" :requirement :required)
+     (trigger :name "TRIGGER" :requirement :required)
+     (duration :name "DURATION" :requirement repeat)
+     (repeat :name "REPEAT" :requirement duration))
+  (:name . "VALARM"))
+
+(define-block audio-alarm (alarm)
+    ((attachment :name "ATTACH" :requirement :optional)))
+
+(define-block display-alarm (alarm)
+    ((description :name "DESCRIPTION" :requirement :required)))
+
+(define-block email-alarm (alarm)
+    ((attachments :name "ATTACH" :requirement :multiple)
+     (description  :name "DESCRIPTION" :requirement :required)
+     (summary :name "SUMMARY" :requirement :required)
+     (attendees :name "ATTENDEE" :requirement :multiple)))
+
+(define-block time-zone-component (component)
+    ((start :name "DTSTART" :requirement :required)
+     (offset-to :name "TZOFFSETTO" :requirement :required)
+     (offset-from :name "TZOFFSETFROM" :requirement :required)
+     (recurrence-rule :name "RRULE" :requirement :optional)
+     (comments :name "COMMENT" :requirement :multiple)
+     (recurrence-dates :name "RDATE" :requirement :multiple)
+     (tznames :name "TZNAME" :requirement :multiple)))
+
+(define-block time-zone-standard (time-zone-component)
+    ()
+  (:name . "STANDARD"))
+
+(define-block time-zone-daylight (time-zone-component)
+    ()
+  (:name . "DAYLIGHT"))
+
+(define-block iana (component)
+    ())
+
+(define-block extension (component)
+    ())
