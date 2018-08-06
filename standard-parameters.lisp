@@ -68,7 +68,7 @@
   (:type (member :start :end))
   (:identifier "RELATED"))
 
-(define-parameter relation-type ()
+(define-parameter relationship-type ()
   (:type (or string (member :parent :child :sibling)))
   (:identifier "RELTYPE"))
 

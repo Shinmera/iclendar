@@ -11,21 +11,25 @@
 
 (define-property (attachments "ATTACH")
   :requirement :multiple
-  :type attachment)
+  :type attachment
+  :parameters (encoding value-type))
 
 (define-property (attendees "ATTENDEE")
   :requirement :multiple
-  :type address)
+  :type address
+  :parameters (language calendar-user-type membership role participation-status reply-requested delegatee delegator sent-by common-name directory-entry))
 
 (define-property (categories "CATEGORIES")
-  :requirement :multiple)
+  :requirement :multiple
+  :parameters (language))
 
 (define-property (classification "CLASS")
   :requirement :optional
   :type (or string (member :public :private :conditential)))
 
 (define-property (comments "COMMENT")
-  :requirement :multiple)
+  :requirement :multiple
+  :parameters (alternate-representation language))
 
 (define-property (completed "COMPLETED")
   :requirement :optional
@@ -36,18 +40,21 @@
   :type (integer 0 100))
 
 (define-property (contacts "CONTACT")
-  :requirement :multiple)
+  :requirement :multiple
+  :parameters (alternate-representation language))
 
 (define-property (created "CREATED")
   :requirement :optional
   :type date-time)
 
 (define-property (description "DESCRIPTION")
-  :requirement :optional)
+  :requirement :optional
+  :parameters (alternate-representation language))
 
 (define-property (due "DUE")
   :requirement (not duration)
-  :type (or date-time date))
+  :type (or date-time date)
+  :parameters (value-type time-zone-identifier))
 
 (define-property (duration "DURATION")
   :requirement :optional
@@ -55,15 +62,18 @@
 
 (define-property (end "DTEND")
   :requirement :optional
-  :type (or date-time date))
+  :type (or date-time date)
+  :parameters (value-type time-zone-identifier))
 
 (define-property (exception-dates "EXDATE")
   :requirement :multiple
-  :type (or date-time date))
+  :type (or date-time date)
+  :parameters (value-type time-zone-identifier))
 
 (define-property (free/busy "FREEBUSY")
   :requirement :multiple
-  :type period)
+  :type period
+  :parameters (free/busy-type))
 
 (define-property (geographic-location "GEO")
   :requirement :optional
@@ -74,7 +84,8 @@
   :type date-time)
 
 (define-property (location "LOCATION")
-  :requirement :optional)
+  :requirement :optional
+  :parameters (alternate-representation language))
 
 (define-property (offset-from "TZOFFSETFROM")
   :requirement :required
@@ -86,7 +97,8 @@
 
 (define-property (organizer "ORGANIZER")
   :requirement :optional
-  :type address)
+  :type address
+  :parameters (language common-name directory-entry sent-by))
 
 (define-property (priority "PRIORITY")
   :requirement :optional
@@ -97,18 +109,21 @@
 
 (define-property (recurrence "RECURRENCE-ID")
   :requirement :optional
-  :type (or date-time date))
+  :type (or date-time date)
+  :parameters (value-type time-zone-identifier recurrence-identifier-range))
 
 (define-property (recurrence-dates "RDATE")
   :requirement :multiple
-  :type (or date-time date))
+  :type (or date-time date)
+  :parameters (value-type time-zone-identifier))
 
 (define-property (recurrence-rule "RRULE")
   :requirement :optional
   :type recurrence)
 
 (define-property (related "RELATED-TO")
-  :requirement :optional)
+  :requirement :optional
+  :parameters (relationship-type))
 
 (define-property (repeat "REPEAT")
   :requirement duration
@@ -118,7 +133,8 @@
   :requirement :multiple)
 
 (define-property (resources "RESOURCES")
-  :requirement :multiple)
+  :requirement :multiple
+  :parameters (alternate-representation language))
 
 (define-property (scale "CALSCALE")
   :requirement :optional)
@@ -133,13 +149,15 @@
 
 (define-property (start "DTSTART")
   :requirement :required
-  :type (or date-time date))
+  :type (or date-time date)
+  :parameters (value-type time-zone-identifier))
 
 (define-property (status "STATUS")
   :requirement :optional)
 
 (define-property (summary "SUMMARY")
-  :requirement :optional)
+  :requirement :optional
+  :parameters (alternate-representation language))
 
 (define-property (transparency "TRANSP")
   :requirement :optional)
@@ -149,13 +167,15 @@
 
 (define-property (trigger "TRIGGER")
   :requirement :required
-  :type (or duration date-time))
+  :type (or duration date-time)
+  :parameters (value-type time-zone-identifier trigger-on))
 
 (define-property (tzid "TZID")
   :requirement :required)
 
 (define-property (tznames "TZNAME")
-  :requirement :multiple)
+  :requirement :multiple
+  :parameters (language))
 
 (define-property (tzurl "TZURL")
   :requirement :optional

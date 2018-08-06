@@ -25,8 +25,8 @@
 
 (define-block date-component (calendar-component)
   (attachments categories classification contacts created exception-dates
-              last-modification organizer recurrence recurrence-dates recurrence-rule
-              related resources sequence-number status summary)
+               last-modification organizer recurrence recurrence-dates recurrence-rule
+               related resources sequence-number status summary)
   ())
 
 (define-block task-component (date-component)
