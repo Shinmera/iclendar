@@ -13,8 +13,9 @@
   :homepage "https://github.com/Shinmera/iclendar"
   :serial T
   :components ((:file "package")
-               (:file "block")
+               (:file "protocol")
                (:file "standard-types")
+               (:file "standard-parameters")
                (:file "standard-blocks")
                (:file "documentation"))
   :depends-on (:closer-mop

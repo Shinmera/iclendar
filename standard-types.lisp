@@ -10,12 +10,21 @@
 
 (deftype date ())
 
-(deftype uri ())
+(deftype uri ()
+  'string)
 
-(deftype attachment ())
+(deftype attachment ()
+  '(or uri pathname (vector (unsigned-byte 8))))
 
 (deftype address ()
   'uri)
+
+(defun address-list-p (list)
+  (loop for entry in list
+        always (typep entry 'address)))
+
+(deftype address-list ()
+  '(and address (satisfies address-list-p)))
 
 (deftype recurrence ())
 
@@ -28,3 +37,9 @@
 (deftype period ())
 
 (deftype utc-offset ())
+
+(deftype text ()
+  'string)
+
+(deftype language ()
+  'string)

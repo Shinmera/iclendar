@@ -10,7 +10,7 @@
   ((components
     :identifier NIL
     :requirement :multiple)
-   (method
+   (transport-method
     :identifier "METHOD"
     :requirement :optional)
    (product
@@ -22,7 +22,7 @@
    (version
     :identifier "VERSION"
     :requirement :required))
-  (:identifier . "VCALENDAR"))
+  (:identifier "VCALENDAR"))
 
 (define-block component ()
   ((extensions
@@ -67,9 +67,10 @@
    (categories
     :identifier "CATEGORIES"
     :requirement :multiple)
-   (class
+   (classification
     :identifier "CLASS"
-    :requirement :optional)
+    :requirement :optional
+    :type (or string (member :public :private :conditential)))
    (contacts
     :identifier "CONTACT"
     :requirement :multiple)
@@ -150,7 +151,7 @@
    (transparency
     :identifier "TRANSP"
     :requirement :optional))
-  (:identifier . "VEVENT"))
+  (:identifier "VEVENT"))
 
 (define-block todo (task-component)
   ((completed
@@ -169,11 +170,11 @@
     :identifier "DURATION"
     :requirement (not due)
     :type duration))
-  (:identifier . "VTODO"))
+  (:identifier "VTODO"))
 
 (define-block journal (date-component)
   ()
-  (:identifier . "VJOURNAL"))
+  (:identifier "VJOURNAL"))
 
 (define-block free/busy (calendar-component)
   ((contact
@@ -191,7 +192,7 @@
     :identifier "ORGANIZER"
     :requirement :optional
     :type address))
-  (:identifier . "VFREEBUSY"))
+  (:identifier "VFREEBUSY"))
 
 (define-block time-zone (component)
   ((tzid
@@ -208,7 +209,7 @@
    (components
     :identifier NIL
     :requirement :multiple))
-  (:identifier . "VTIMEZONE"))
+  (:identifier "VTIMEZONE"))
 
 (define-block alarm (component)
   ((action
@@ -285,14 +286,14 @@
 
 (define-block time-zone-standard (time-zone-component)
   ()
-  (:identifier . "STANDARD"))
+  (:identifier "STANDARD"))
 
 (define-block time-zone-daylight (time-zone-component)
   ()
-  (:identifier . "DAYLIGHT"))
+  (:identifier "DAYLIGHT"))
 
 (define-block iana (component)
   ())
 
 (define-block extension (component)
-  ())
+  ((identifier :initarg :identifier :accessor identifier)))
