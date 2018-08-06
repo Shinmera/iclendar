@@ -16,6 +16,7 @@
                (:file "protocol")
                (:file "standard-types")
                (:file "standard-parameters")
+               (:file "standard-properties")
                (:file "standard-blocks")
                (:file "documentation"))
   :depends-on (:closer-mop

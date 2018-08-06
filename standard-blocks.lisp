@@ -6,294 +6,94 @@
 
 (in-package #:org.shirakumo.iclendar)
 
-(define-block calendar ()
-  ((components
-    :identifier NIL
-    :requirement :multiple)
-   (transport-method
-    :identifier "METHOD"
-    :requirement :optional)
-   (product
-    :identifier "PRODID"
-    :requirement :required)
-   (scale
-    :identifier "CALSCALE"
-    :requirement :optional)
-   (version
-    :identifier "VERSION"
-    :requirement :required))
+(defclass component-container ()
+  ((components :initform NIL :initarg :components :reader components)))
+
+(define-block calendar (component-container)
+  (product scale transport-method version)
+  ()
   (:identifier "VCALENDAR"))
 
 (define-block component ()
-  ((extensions
-    :identifier NIL
-    :requirement :multiple)
-   (iana
-    :identifier NIL
-    :requirement :multiple)))
+  ()
+  ((unknown-properties :initarg :unknown-properties :reader unknown-properties))
+  (:default-initargs :unknown-properties ()))
 
 (define-block calendar-component (component)
-  ((attendees
-    :identifier "ATTENDEE"
-    :requirement :multiple
-    :type address)
-   (comments
-    :identifier "COMMENT"
-    :requirement :multiple)
-   (request-status
-    :identifier "REQUEST-STATUS"
-    :requirement :multiple)
-   (stamp
-    :identifier "DTSTAMP"
-    :requirement :required
-    :type date-time)
-   (start
-    :identifier "DTSTART"
-    :requirement (not method)
-    :type (or date-time date))
-   (uid
-    :identifier "UID"
-    :requirement :required)
-   (url
-    :identifier "URL"
-    :requirement :optional
-    :type uri)))
+  (attendees comments request-status stamp start uid url)
+  ())
 
 (define-block date-component (calendar-component)
-  ((attachments
-    :identifier "ATTACH"
-    :requirement :multiple
-    :type attachment)
-   (categories
-    :identifier "CATEGORIES"
-    :requirement :multiple)
-   (classification
-    :identifier "CLASS"
-    :requirement :optional
-    :type (or string (member :public :private :conditential)))
-   (contacts
-    :identifier "CONTACT"
-    :requirement :multiple)
-   (created
-    :identifier "CREATED"
-    :requirement :optional
-    :type date-time)
-   (exception-dates
-    :identifier "EXDATE"
-    :requirement :multiple
-    :type (or date-time date))
-   (last-modification
-    :identifier "LAST-MODIFIED"
-    :requirement :optional
-    :type date-time)
-   (organizer
-    :identifier "ORGANIZER"
-    :requirement :optional
-    :type address)
-   (recurrence-dates
-    :identifier "RDATE"
-    :requirement :multiple
-    :type (or date-time date))
-   (recurrence
-    :identifier "RECURRENCE-ID"
-    :requirement :optional
-    :type (or date-time date))
-   (related
-    :identifier "RELATED-TO"
-    :requirement :optional)
-   (resources
-    :identifier "RESOURCES"
-    :requirement :multiple)
-   (recurrence-rule
-    :identifier "RRULE"
-    :requirement :optional
-    :type recurrence)
-   (sequence-number
-    :identifier "SEQUENCE"
-    :requirement :optional
-    :type (integer 0))
-   (status
-    :identifier "STATUS"
-    :requirement :optional)
-   (summary
-    :identifier "SUMMARY"
-    :requirement :optional)))
+  (attachments categories classification contacts created exception-dates
+              last-modification organizer recurrence recurrence-dates recurrence-rule
+              related resources sequence-number status summary)
+  ())
 
 (define-block task-component (date-component)
-  ((description
-    :identifier "DESCRIPTION"
-    :requirement :optional)
-   (duration
-    :identifier "DURATION"
-    :requirement :optional
-    :type duration)
-   (geographic-location
-    :identifier "GEO"
-    :requirement :optional
-    :type geo)
-   (location
-    :identifier "LOCATION"
-    :requirement :optional)
-   (priority
-    :identifier "PRIORITY"
-    :requirement :optional
-    :type (integer 0 9))))
+  (description duration geographic-location location priority)
+  ())
 
 (define-block event (task-component)
-  ((end
-    :identifier "DTEND"
-    :requirement (not duration)
-    :type (or date-time date))
-   (duration
-    :identifier "DURATION"
-    :requirement (not end)
-    :type duration)
-   (transparency
-    :identifier "TRANSP"
-    :requirement :optional))
+  (end transparency)
+  ((end :requirement (not duration))
+   (duration :requirement (not end)))
   (:identifier "VEVENT"))
 
 (define-block todo (task-component)
-  ((completed
-    :identifier "COMPLETED"
-    :requirement :optional
-    :type date-time)
-   (completeness
-    :identifier "PERCENT-COMPLETE"
-    :requirement :optional
-    :type (integer 0 100))
-   (due
-    :identifier "DUE"
-    :requirement (not duration)
-    :type (or date-time date))
-   (duration
-    :identifier "DURATION"
-    :requirement (not due)
-    :type duration))
+  (completed completeness due duration)
+  ((due :requirement (not duration))
+   (duration :requirement (not due)))
   (:identifier "VTODO"))
 
 (define-block journal (date-component)
   ()
+  ()
   (:identifier "VJOURNAL"))
 
 (define-block free/busy (calendar-component)
-  ((contact
-    :identifier "CONTACT"
-    :requirement :optional)
-   (end
-    :identifier "DTEND"
-    :requirement :optional
-    :type (or date-time date))
-   (free/busy
-    :identifier "FREEBUSY"
-    :requirement :multiple
-    :type period)
-   (organizer
-    :identifier "ORGANIZER"
-    :requirement :optional
-    :type address))
+  (contacts end free/busy organizer)
+  ((contacts :requirement :optional))
   (:identifier "VFREEBUSY"))
 
-(define-block time-zone (component)
-  ((tzid
-    :identifier "TZID"
-    :requirement :required)
-   (last-modification
-    :identifier "LAST-MODIFIED"
-    :requirement :optional
-    :type date-time)
-   (tzurl
-    :identifier "TZURL"
-    :requirement :optional
-    :type uri)
-   (components
-    :identifier NIL
-    :requirement :multiple))
+(define-block time-zone (component component-container)
+  (tzid last-modification tzurl)
+  ()
   (:identifier "VTIMEZONE"))
 
 (define-block alarm (component)
-  ((action
-    :identifier "ACTION"
-    :requirement :required)
-   (trigger
-    :identifier "TRIGGER"
-    :requirement :required
-    :type (or duration date-time))
-   (duration
-    :identifier "DURATION"
-    :requirement repeat
-    :type duration)
-   (repeat
-    :identifier "REPEAT"
-    :requirement duration
-    :type (integer 0)))
+  (action duration repeat trigger)
+  ((duration :requirement repeat)
+   (repeat :requirement duration))
   (:identifier . "VALARM"))
 
 (define-block audio-alarm (alarm)
-  ((attachment
-    :identifier "ATTACH"
-    :requirement :optional
-    :type attachment)))
+  (attachment)
+  ((attachment :requirement :optional)))
 
 (define-block display-alarm (alarm)
-  ((description
-    :identifier "DESCRIPTION"
-    :requirement :required)))
+  (description)
+  ((description :requirement :required)))
 
 (define-block email-alarm (alarm)
-  ((attachments
-    :identifier "ATTACH"
-    :requirement :multiple
-    :type attachment)
-   (description
-    :identifier "DESCRIPTION"
-    :requirement :required)
-   (summary
-    :identifier "SUMMARY"
-    :requirement :required)
-   (attendees
-    :identifier "ATTENDEE"
-    :requirement :multiple
-    :type address)))
+  (attachment attendee description summary)
+  ((description :requirement :required)
+   (summary :requirement :required)))
 
 (define-block time-zone-component (component)
-  ((start
-    :identifier "DTSTART"
-    :requirement :required
-    :type (or date-time date))
-   (offset-to
-    :identifier "TZOFFSETTO"
-    :requirement :required
-    :type utc-offset)
-   (offset-from
-    :identifier "TZOFFSETFROM"
-    :requirement :required
-    :type utc-offset)
-   (recurrence-rule
-    :identifier "RRULE"
-    :requirement :optional
-    :type recurrence)
-   (comments
-    :identifier "COMMENT"
-    :requirement :multiple)
-   (recurrence-dates
-    :identifier "RDATE"
-    :requirement :multiple
-    :type (or date-time date))
-   (tznames
-    :identifier "TZNAME"
-    :requirement :multiple)))
+  (comment-component start-component recurrence-dates recurrence-rule offset-to offset-from tznames)
+  ())
 
 (define-block time-zone-standard (time-zone-component)
-  ()
+  () ()
   (:identifier "STANDARD"))
 
 (define-block time-zone-daylight (time-zone-component)
-  ()
+  () ()
   (:identifier "DAYLIGHT"))
 
 (define-block iana (component)
-  ())
+  () ())
 
 (define-block extension (component)
+  ()
   ((identifier :initarg :identifier :accessor identifier)))

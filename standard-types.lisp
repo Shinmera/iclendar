@@ -7,9 +7,7 @@
 (in-package #:org.shirakumo.iclendar)
 
 (defmacro define-list-type (name inner)
-  (let ((predicate (let ((*print-case* (readtable-case *readtable*)))
-                     (intern (format NIL "~a-~a" name 'p)
-                             #.*package*))))
+  (let ((predicate (intern* name 'p)))
     `(progn (defun ,predicate (list)
               (loop for entry in list
                     always (typep entry ',inner)))
