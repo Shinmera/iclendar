@@ -111,3 +111,5 @@
 (defmethod serialize-object :after ((component component-container) stream)
   (dolist (component (components component))
     (serialize-object component stream)))
+
+;; FIXME: special case attachment encoding
