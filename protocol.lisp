@@ -120,6 +120,18 @@
         (T
          (format stream "~a" (value property)))))
 
+(defmethod parameters ((property property))
+  (append (loop for name being the hash-keys of (x-parameters property)
+                for value being the hash-values of (x-parameters property)
+                collect (list name value))
+          (loop for slot in (c2mop:class-slots property)
+                when (typep slot 'parameter-slot)
+                collect (list (identifier slot)
+                              (slot-value property (c2mop:slot-definition-name slot))))))
+
+(defmethod identifier ((property property))
+  (identifier (class-of property)))
+
 (defmacro define-property ((name identifier) &body body)
   `(defclass ,name (property)
      ((value :type ,(getf body :type 'text))
@@ -273,6 +285,14 @@
 
 (defmethod identifier ((component component))
   (identifier (class-of component)))
+
+(defmethod properties ((component component))
+  (append (x-properties component)
+          (loop for slot in (c2mop:class-slots component)
+                when (and (typep slot 'property-slot)
+                          (slot-boundp component (c2mop:slot-definition-name slot)))
+                append (let ((value (slot-value component (c2mop:slot-definition-name slot))))
+                         (if (listp value) value (list value))))))
 
 (defmacro define-component (name direct-superclasses direct-slots &rest options)
   (destructuring-bind (name identifier) (if (listp name) name (list name NIL))

@@ -15,19 +15,25 @@
 (defun serialize (object &optional (output T) &key (if-exists :error))
   (etypecase output
     (stream
-     (serialize-object object output))
+     (serialize-object object (make-icalendar-stream output)))
     ((eql T)
-     (serialize-object object *standard-output*))
+     (serialize-object object (make-icalendar-stream *standard-output*)))
     ((or pathname string)
      (with-open-file (stream output :direction :output
                                     :if-exists if-exists)
-       (serialize-object object stream)))
+       (serialize-object object (make-icalendar-stream stream))))
     ((eql NIL)
      (with-output-to-string (stream)
-       (serialize-object object stream)))))
+       (serialize-object object (make-icalendar-stream stream))))))
 
 (defmethod serialize-object ((symbol symbol) stream)
-  (format stream "~:@(~a~)" (symbol-name symbol)))
+  (case symbol
+    ((T) (format stream "TRUE"))
+    ((NIL) (format stream "FALSE"))
+    (T (format stream "~:@(~a~)" (symbol-name symbol)))))
+
+(defmethod serialize-object ((string string) stream)
+  (write-string string stream))
 
 (defmethod serialize-object ((object week-day-num) stream)
   (format stream "~@[~d~]~a" (week-day-num-week object)
@@ -85,3 +91,23 @@
 
 (defmethod serialize-object ((object geo) stream)
   (format stream "~f;~f" (geo-lat object) (geo-lng object)))
+
+(defmethod serialize-object ((object property) stream)
+  (format stream "~a~{;~a=\"~/iclendar::s/\"~}:~a"
+          (identifier object) (parameters object) (value object))
+  (terpri stream))
+
+(defmethod serialize-object :around ((component component) stream)
+  (format stream "BEGIN:~a" (identifier component))
+  (terpri stream)
+  (call-next-method)
+  (format stream "END:~a" (identifier component))
+  (terpri stream))
+
+(defmethod serialize-object ((component component) stream)
+  (dolist (property (properties component))
+    (serialize-object property stream)))
+
+(defmethod serialize-object :after ((component component-container) stream)
+  (dolist (component (components component))
+    (serialize-object component stream)))

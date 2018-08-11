@@ -13,6 +13,7 @@
   :homepage "https://github.com/Shinmera/iclendar"
   :serial T
   :components ((:file "package")
+               (:file "stream")
                (:file "protocol")
                (:file "standard-types")
                (:file "standard-parameters")
@@ -21,4 +22,5 @@
                (:file "serializer")
                (:file "documentation"))
   :depends-on (:closer-mop
+               :trivial-gray-stream
                :documentation-utils))
