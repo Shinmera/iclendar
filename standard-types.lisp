@@ -35,10 +35,10 @@
   '(member :sunday :monday :tuesday :wednesday :thursday :friday :saturday))
 
 (defstruct (week-day-num (:constructor make-weekday-num (week-day &optional week)))
-  (week NIL :type (or null (integer 1 53)))
+  (week NIL :type (or null (integer -53 53)))
   (week-day NIL :type week-day))
 
-(define-print-object week-day-num NIL "~@[~dth ~]~s"
+(define-print-object week-day-num NIL "~@[~d ~]~s"
   week-day-num-week week-day-num-week-day)
 
 (defstruct (date)

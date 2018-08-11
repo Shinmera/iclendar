@@ -18,6 +18,7 @@
                (:file "standard-parameters")
                (:file "standard-properties")
                (:file "standard-components")
+               (:file "serializer")
                (:file "documentation"))
   :depends-on (:closer-mop
                :documentation-utils))
