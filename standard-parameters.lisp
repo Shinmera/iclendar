@@ -6,87 +6,59 @@
 
 (in-package #:org.shirakumo.iclendar)
 
-(define-parameter alternate-representation ()
-  (:identifier "ALTREP"))
+(define-parameter (alternate-representation "ALTREP"))
 
-(define-parameter common-name ()
-  (:identifier "CN"))
+(define-parameter (common-name "CN"))
 
-(define-parameter calendar-user-type ()
-  (:type (or string (member :individual :group :resource :room :unknown)))
-  (:identifier "CUTYPE"))
+(define-parameter (calendar-user-type "CUTYPE")
+  :type (or string (member :individual :group :resource :room :unknown)))
 
-(define-parameter delegator ()
-  (:type address-list)
-  (:identifier "DELEGATED-FROM"))
+(define-parameter (delegator "DELEGATED-FROM")
+  :type address-list)
 
-(define-parameter delegatee ()
-  (:type address-list)
-  (:identifier "DELEGATED-TO"))
+(define-parameter (delegatee "DELEGATED-TO")
+  :type address-list)
 
-(define-parameter directory-entry ()
-  (:type uri)
-  (:identifier "DIR"))
+(define-parameter (directory-entry "DIR")
+  :type uri)
 
-(define-parameter encoding ()
-  (:type (member :8bit :base64))
-  (:identifier "ENCODING"))
+(define-parameter (encoding "ENCODING")
+  :type (member :8bit :base64))
 
-(define-parameter format-type ()
-  (:type cons)
-  (:identifier "FMTTYPE"))
+(define-parameter (format-type "FMTTYPE")
+  :type cons)
 
-(define-parameter free/busy-type ()
-  (:type (or string (member :free :busy :busy-unavailable :busy-tentative)))
-  (:identifier "FBTYPE"))
+(define-parameter (free/busy-type "FBTYPE")
+  :type (or string (member :free :busy :busy-unavailable :busy-tentative)))
 
-(define-parameter language ()
-  (:type language)
-  (:identifier "LANGUAGE"))
+(define-parameter (language "LANGUAGE")
+  :type language)
 
-(define-parameter membership ()
-  (:type address-list)
-  (:identifier "MEMBER"))
+(define-parameter (membership "MEMBER")
+  :type address-list)
 
-(define-parameter participation-status ()
-  (:identifier "PARTSTAT"))
+(define-parameter (participation-status "PARTSTAT")
+  :type (or string (member :needs-action :accepted :declined :tentative :delegated :completed :in-process)))
 
-(define-parameter participation-status-event (participation-status)
-  (:type (or string (member :needs-action :accepted :declined :tentative :delegated))))
+(define-parameter (recurrence-identifier-range "RANGE")
+  :type (member :this-and-future))
 
-(define-parameter participation-status-todo (participation-status)
-  (:type (or string (member :needs-action :accepted :declined :tentative :delegated :completed :in-process))))
+(define-parameter (trigger-on "RELATED")
+  :type (member :start :end))
 
-(define-parameter participation-status-journal (participation-status)
-  (:type (or string (member :needs-action :accepted :declined))))
+(define-parameter (relationship-type "RELTYPE")
+  :type (or string (member :parent :child :sibling)))
 
-(define-parameter recurrence-identifier-range ()
-  (:type (member :this-and-future))
-  (:identifier "RANGE"))
+(define-parameter (role "ROLE")
+  :type (or string (member :chair :req-participant :opt-participant :non-participant)))
 
-(define-parameter trigger-on ()
-  (:type (member :start :end))
-  (:identifier "RELATED"))
+(define-parameter (reply-requested "RSVP")
+  :type boolean)
 
-(define-parameter relationship-type ()
-  (:type (or string (member :parent :child :sibling)))
-  (:identifier "RELTYPE"))
+(define-parameter (sent-by "SENT-BY")
+  :type address)
 
-(define-parameter role ()
-  (:type (or string (member :chair :req-participant :opt-participant :non-participant)))
-  (:identifier "ROLE"))
+(define-parameter (time-zone-identifier "TZID"))
 
-(define-parameter reply-requested ()
-  (:type boolean)
-  (:identifier "RSVP"))
-
-(define-parameter sent-by ()
-  (:type address)
-  (:identifier "SENT-BY"))
-
-(define-parameter time-zone-identifier ()
-  (:identifier "TZID"))
-
-(define-parameter value-type ()
-  (:type (or string (member :binary :boolean :cal-address :date :date-time :duration :float :integer :period :recur :text :time :uri :utc-offset)))
-  (:identifier "VALUE"))
+(define-parameter (value-type "VALUE")
+  :type (or string (member :binary :boolean :cal-address :date :date-time :duration :float :integer :period :recur :text :time :uri :utc-offset)))

@@ -6,187 +6,142 @@
 
 (in-package #:org.shirakumo.iclendar)
 
-(define-property (action "ACTION")
-  :requirement :required)
+(define-property (action "ACTION"))
 
-(define-property (attachments "ATTACH")
-  :requirement :multiple
+(define-property (attachment "ATTACH")
   :type attachment
   :parameters (encoding value-type))
 
-(define-property (attendees "ATTENDEE")
-  :requirement :multiple
+(define-property (attendee "ATTENDEE")
   :type address
   :parameters (language calendar-user-type membership role participation-status reply-requested delegatee delegator sent-by common-name directory-entry))
 
-(define-property (categories "CATEGORIES")
-  :requirement :multiple
+(define-property (category "CATEGORIES")
   :parameters (language))
 
 (define-property (classification "CLASS")
-  :requirement :optional
   :type (or string (member :public :private :conditential)))
 
-(define-property (comments "COMMENT")
-  :requirement :multiple
+(define-property (comment "COMMENT")
   :parameters (alternate-representation language))
 
 (define-property (completed "COMPLETED")
-  :requirement :optional
   :type date-time)
 
 (define-property (completeness "PERCENT-COMPLETE")
-  :requirement :optional
   :type (integer 0 100))
 
-(define-property (contacts "CONTACT")
-  :requirement :multiple
+(define-property (contact "CONTACT")
   :parameters (alternate-representation language))
 
 (define-property (created "CREATED")
-  :requirement :optional
   :type date-time)
 
 (define-property (description "DESCRIPTION")
-  :requirement :optional
   :parameters (alternate-representation language))
 
 (define-property (due "DUE")
-  :requirement (not duration)
   :type (or date-time date)
   :parameters (value-type time-zone-identifier))
 
+;; FIXME: duplicate with duration type
 (define-property (duration "DURATION")
-  :requirement :optional
-  :type duration)
+  :type time-span)
 
 (define-property (end "DTEND")
-  :requirement :optional
   :type (or date-time date)
   :parameters (value-type time-zone-identifier))
 
-(define-property (exception-dates "EXDATE")
-  :requirement :multiple
+(define-property (exception-date "EXDATE")
   :type (or date-time date)
   :parameters (value-type time-zone-identifier))
 
-(define-property (free/busy "FREEBUSY")
-  :requirement :multiple
+(define-property (free/busy-period "FREEBUSY")
   :type period
   :parameters (free/busy-type))
 
 (define-property (geographic-location "GEO")
-  :requirement :optional
   :type geo)
 
 (define-property (last-modification "LAST-MODIFIED")
-  :requirement :optional
   :type date-time)
 
 (define-property (location "LOCATION")
-  :requirement :optional
   :parameters (alternate-representation language))
 
 (define-property (offset-from "TZOFFSETFROM")
-  :requirement :required
   :type utc-offset)
 
 (define-property (offset-to "TZOFFSETTO")
-  :requirement :required
   :type utc-offset)
 
 (define-property (organizer "ORGANIZER")
-  :requirement :optional
   :type address
   :parameters (language common-name directory-entry sent-by))
 
 (define-property (priority "PRIORITY")
-  :requirement :optional
   :type (integer 0 9))
 
-(define-property (product "PRODID")
-  :requirement :required)
+(define-property (product "PRODID"))
 
-(define-property (recurrence "RECURRENCE-ID")
-  :requirement :optional
+(define-property (recurrence-id "RECURRENCE-ID")
   :type (or date-time date)
   :parameters (value-type time-zone-identifier recurrence-identifier-range))
 
-(define-property (recurrence-dates "RDATE")
-  :requirement :multiple
+(define-property (recurrence-date "RDATE")
   :type (or date-time date)
   :parameters (value-type time-zone-identifier))
 
 (define-property (recurrence-rule "RRULE")
-  :requirement :optional
   :type recurrence)
 
 (define-property (related "RELATED-TO")
-  :requirement :optional
   :parameters (relationship-type))
 
 (define-property (repeat "REPEAT")
-  :requirement duration
   :type (integer 0))
 
-(define-property (request-status "REQUEST-STATUS")
-  :requirement :multiple)
+(define-property (request-status "REQUEST-STATUS"))
 
-(define-property (resources "RESOURCES")
-  :requirement :multiple
+(define-property (resource "RESOURCES")
   :parameters (alternate-representation language))
 
-(define-property (scale "CALSCALE")
-  :requirement :optional)
+(define-property (scale "CALSCALE"))
 
 (define-property (sequence-number "SEQUENCE")
-  :requirement :optional
   :type (integer 0))
 
 (define-property (stamp "DTSTAMP")
-  :requirement :required
   :type date-time)
 
 (define-property (start "DTSTART")
-  :requirement :required
   :type (or date-time date)
   :parameters (value-type time-zone-identifier))
 
-(define-property (status "STATUS")
-  :requirement :optional)
+(define-property (status "STATUS"))
 
 (define-property (summary "SUMMARY")
-  :requirement :optional
   :parameters (alternate-representation language))
 
-(define-property (transparency "TRANSP")
-  :requirement :optional)
+(define-property (transparency "TRANSP"))
 
-(define-property (transport-method "METHOD")
-  :requirement :optional)
+(define-property (transport-method "METHOD"))
 
 (define-property (trigger "TRIGGER")
-  :requirement :required
-  :type (or duration date-time)
+  :type (or time-span date-time)
   :parameters (value-type time-zone-identifier trigger-on))
 
-(define-property (tzid "TZID")
-  :requirement :required)
+(define-property (tzid "TZID"))
 
-(define-property (tznames "TZNAME")
-  :requirement :multiple
+(define-property (tzname "TZNAME")
   :parameters (language))
 
 (define-property (tzurl "TZURL")
-  :requirement :optional
   :type uri)
 
-(define-property (uid "UID")
-  :requirement :required)
+(define-property (uid "UID"))
 
 (define-property (url "URL")
-  :requirement :optional
   :type uri)
 
-(define-property (version "VERSION")
-  :requirement :required)
+(define-property (version "VERSION"))

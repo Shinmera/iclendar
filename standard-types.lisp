@@ -7,7 +7,8 @@
 (in-package #:org.shirakumo.iclendar)
 
 (defmacro define-list-type (name inner)
-  (let ((predicate (intern* name 'p)))
+  (let ((predicate (intern (let ((*print-case* (readtable-case *readtable*)))
+                             (format NIL "~a-~a" name 'p)))))
     `(progn (defun ,predicate (list)
               (loop for entry in list
                     always (typep entry ',inner)))
@@ -48,7 +49,7 @@
   (second 0 :type (integer 0 60))
   (utc-p NIL :type boolean))
 
-(defstruct (duration)
+(defstruct (time-span)
   (week NIL :type (or null (integer 0)))
   (hour NIL :type (or null (integer 0)))
   (minute NIL :type (or null (integer 0)))
@@ -58,7 +59,7 @@
 
 (defstruct (period (:constructor make-period (start limit)))
   (start NIL :type date-time)
-  (limit NIL :type (or duration date-time)))
+  (limit NIL :type (or time-span date-time)))
 
 (defstruct (recurrence (:constructor make-recurrency (frequency &key end-date count interval by-seconds by-minutes by-hours by-days by-month-days by-year-days by-weeks by-months by-set-pos week-start)))
   (frequency NIL :type (member :secondly :minutely :hourly :daily :weekly :monthly :yearly))
@@ -74,7 +75,7 @@
   (by-weeks NIL :type week-list)
   (by-months NIL :type month-list)
   (by-set-pos NIL :type year-day-list)
-  (week-start NIL :type (or null weekday)))
+  (week-start NIL :type (or null week-day)))
 
 (deftype uri ()
   'string)
