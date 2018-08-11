@@ -162,13 +162,13 @@
      (check-slot-value slot value))))
 
 (defmethod (setf c2mop:slot-value-using-class) (value (class standard-class) (object standard-object) (slot property-slot))
-  (cond ((or (typep value 'property)
-             (and (listp value) (typep (first value) 'property)))
+  (cond ((typep value 'property)
          (call-next-method))
         ((eql :multiple (constraint slot))
-         (setf (c2mop:slot-value-using-class class object slot)
-               (loop for item in value
-                     collect (make-instance (property-type slot) :value item))))
+         (loop for cons on value
+               do (unless (typep (car cons) 'property)
+                    (setf (car cons) (make-instance (property-type slot) :value (car cons)))))
+         (call-next-method))
         (T
          (setf (c2mop:slot-value-using-class class object slot)
                (make-instance (property-type slot) :value value)))))
