@@ -93,7 +93,7 @@
   (format stream "~f;~f" (geo-lat object) (geo-lng object)))
 
 (defmethod serialize-object ((object property) stream)
-  (format stream "~a~{;~a=\"~/iclendar::s/\"~}:~a"
+  (format stream "~a~{;~a=\"~/iclendar::s/\"~}:~/iclendar::s/"
           (identifier object) (parameters object) (value object))
   (terpri stream))
 

@@ -124,8 +124,9 @@
   (append (loop for name being the hash-keys of (x-parameters property)
                 for value being the hash-values of (x-parameters property)
                 collect (list name value))
-          (loop for slot in (c2mop:class-slots property)
-                when (typep slot 'parameter-slot)
+          (loop for slot in (c2mop:class-slots (class-of property))
+                when (and (typep slot 'parameter-slot)
+                          (slot-boundp property (c2mop:slot-definition-name slot)))
                 collect (list (identifier slot)
                               (slot-value property (c2mop:slot-definition-name slot))))))
 
@@ -288,7 +289,7 @@
 
 (defmethod properties ((component component))
   (append (x-properties component)
-          (loop for slot in (c2mop:class-slots component)
+          (loop for slot in (c2mop:class-slots (class-of component))
                 when (and (typep slot 'property-slot)
                           (slot-boundp component (c2mop:slot-definition-name slot)))
                 append (let ((value (slot-value component (c2mop:slot-definition-name slot))))
