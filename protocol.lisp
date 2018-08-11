@@ -119,28 +119,28 @@
                (c2mop:slot-definition-type slot))
       (return (c2mop:slot-definition-type slot)))))
 
-(defmethod check-slot-valid ((slot c2mop:standard-slot-definition) instance))
-
 (defmethod check-slot-value ((slot property-slot) value)
   (unless (or (typep value (property-type slot))
               (typep value (property-slot-value-type slot)))
     (error "The value ~s for ~s is not a ~s or ~s."
            value (c2mop:slot-definition-name slot) (property-type slot) (property-slot-value-type slot))))
 
-(defmethod check-slot-valid ((slot property-slot) instance)
+(defmethod check-slot-constraint ((slot property-slot) instance)
   (let ((name (c2mop:slot-definition-name slot)))
     (etypecase (constraint slot)
       ((eql :required)
        (unless (slot-boundp instance name)
-         (error "The property ~s is required." name))
-       (check-slot-value slot (slot-value instance name)))
+         (error "The property ~s is required." name)))
       ((eql :optional)
        (when (slot-boundp instance name)
-         (check-slot-value slot (slot-value instance name))))
+         (unless (typep (slot-value instance name) 'property)
+           (error "When the property ~s is set, it must have a property for a value."
+                  name))))
       ((eql :multiple)
        (when (slot-boundp instance name)
-         (dolist (value (slot-value instance name))
-           (check-slot-value slot value))))
+         (unless (listp (slot-value instance name))
+           (error "When the property ~s is set, it must have a list for a value."
+                  name))))
       (cons
        (when (slot-boundp instance name)
          (ecase (first (constraint slot))
@@ -149,10 +149,9 @@
               (error "The property ~s does not allow ~s to be set as well."
                      name (second (constraint slot)))))
            (and
-            (unless (slot-boundp instance (constraint slot))
+            (unless (slot-boundp instance (second (constraint slot)))
               (error "The property ~s requires ~s to be set as well."
-                     name (constraint slot)))))
-         (check-slot-value slot (slot-value instance name)))))))
+                     name (constraint slot))))))))))
 
 (defmethod (setf c2mop:slot-value-using-class) :before (value (class standard-class) (object standard-object) (slot property-slot))
   (case (constraint slot)
@@ -163,11 +162,16 @@
      (check-slot-value slot value))))
 
 (defmethod (setf c2mop:slot-value-using-class) (value (class standard-class) (object standard-object) (slot property-slot))
-  (if (typep value 'property)
-      (call-next-method)
-      ;; Coerce automatically.
-      (setf (c2mop:slot-value-using-class class object slot)
-            (make-instance (property-type slot) :value value))))
+  (cond ((or (typep value 'property)
+             (and (listp value) (typep (first value) 'property)))
+         (call-next-method))
+        ((eql :multiple (constraint slot))
+         (setf (c2mop:slot-value-using-class class object slot)
+               (loop for item in value
+                     collect (make-instance (property-type slot) :value item))))
+        (T
+         (setf (c2mop:slot-value-using-class class object slot)
+               (make-instance (property-type slot) :value value)))))
 
 (defmethod c2mop:slot-makunbound-using-class :before ((class standard-class) (object standard-object) (slot property-slot))
   (when (eql :required (constraint slot))
@@ -242,7 +246,8 @@
 (defmethod shared-initialize :after ((component component) slots &key)
   (declare (ignore slots))
   (dolist (slot (c2mop:class-slots (class-of component)))
-    (check-slot-valid slot component)))
+    (when (typep slot 'property-slot)
+      (check-slot-constraint slot component))))
 
 (defmethod identifier ((component component))
   (identifier (class-of component)))
