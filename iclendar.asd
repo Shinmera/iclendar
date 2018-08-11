@@ -17,7 +17,7 @@
                (:file "standard-types")
                (:file "standard-parameters")
                (:file "standard-properties")
-               (:file "standard-blocks")
+               (:file "standard-components")
                (:file "documentation"))
   :depends-on (:closer-mop
                :documentation-utils))
