@@ -48,14 +48,15 @@
     (setf (column stream) 0)))
 
 (defun %write-char (char stream backing)
-  (let ((octets (ceiling (log (char-code char) 2) 8)))
-    (when (<= 75 (+ (column stream) octets))
-      (write-char #\Return backing)
-      (write-char #\Linefeed backing)
-      (write-char #\Space backing)
-      (setf (column stream) 1))
-    (incf (column stream) octets)
-    (write-char char backing)))
+  (unless (char= char #\Return) ;; Avoid CRLFs being output in content lines.
+    (let ((octets (ceiling (log (char-code char) 2) 8)))
+      (when (<= 75 (+ (column stream) octets))
+        (write-char #\Return backing)
+        (write-char #\Linefeed backing)
+        (write-char #\Space backing)
+        (setf (column stream) 1))
+      (incf (column stream) octets)
+      (write-char char backing))))
 
 (defmethod trivial-gray-streams:stream-write-char ((stream icalendar-stream) char)
   (%write-char char stream (backing-stream stream)))
