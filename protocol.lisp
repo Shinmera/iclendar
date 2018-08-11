@@ -6,6 +6,17 @@
 
 (in-package #:org.shirakumo.iclendar)
 
+(defmacro define-print-object (class identity format-string &rest args)
+  (let ((stream (gensym "STREAM")))
+    `(defmethod print-object ((,class ,class) ,stream)
+       (print-unreadable-object (,class ,stream :type T :identity ,identity)
+         (with-accessors ,(loop for arg in args
+                                when (symbolp arg)
+                                collect (list arg arg))
+             ,class
+           (let ((*print-property-value-only* T))
+             (format ,stream ,format-string ,@args)))))))
+
 (defun ensure-finalized (class)
   (let ((class (etypecase class
                  (class class)
@@ -97,6 +108,17 @@
   ((value :initarg :value :accessor value :type text)
    (x-parameters :initarg :x-parameters :initform (make-hash-table :test 'equalp) :accessor x-parameters))
   (:metaclass property-class))
+
+(defvar *print-property-value-only* NIL)
+
+(defmethod print-object ((property property) stream)
+  (cond ((not *print-property-value-only*)
+         (print-unreadable-object (property stream :type T :identity T)
+           (format stream "~s" (value property))))
+        (*print-readably*
+         (format stream "~s" (value property)))
+        (T
+         (format stream "~a" (value property)))))
 
 (defmacro define-property ((name identifier) &body body)
   `(defclass ,name (property)

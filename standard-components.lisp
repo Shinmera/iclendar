@@ -13,7 +13,11 @@
   ((product :constraint :required :property product)
    (scale :property scale)
    (transport-method :property transport-method)
-   (version :constraint :required :property version)))
+   (version :constraint :required :property version))
+  (:default-initargs :version "2.0"))
+
+(define-print-object calendar T "~a ~a"
+  version product)
 
 (define-component calendar-component ()
   ((attendees :constraint :multiple :property attendee)
@@ -23,6 +27,9 @@
    (start :constraint :required :property start)
    (uid :constraint :required :property uid)
    (url :property url)))
+
+(define-print-object calendar-component NIL "~a ~a"
+  uid start)
 
 (define-component date-component (calendar-component)
   ((attachments :constraint :multiple :property attachment)
@@ -54,11 +61,17 @@
    (end :constraint (not duration) :property end)
    (duration :constraint (not end))))
 
+(define-print-object event NIL "~a ~a~@[ - ~a~]~@[ ~a~]"
+  uid start end duration)
+
 (define-component (todo "VTODO") (task-component)
   ((completed :property completed)
    (completeness :property completeness)
    (due :constraint (not duration) :property due)
    (duration :constraint (not due))))
+
+(define-print-object todo NIL "~a ~a~@[ - ~a~]~@[ ~a~]~[ ~2d%~]~@[ DONE~]"
+  uid start end duration completed completeness)
 
 (define-component (journal "VJOURNAL") (date-component)
   ())
@@ -67,18 +80,24 @@
   ((end :property end)
    (periods :constraint :multiple :property free/busy-period)
    (organizer :property organizer)
-   (contact :constraint :optional :property contact)))
+   (contact :property contact)))
 
 (define-component (time-zone "VTIMEZONE") (component-container)
   ((tzid :constraint :required :property tzid)
    (last-modification :property last-modification)
    (tzurl :property tzurl)))
 
+(define-print-object time-zone NIL "~a ~a"
+  tzid tzurl)
+
 (define-component (alarm "VALARM") ()
   ((action :constraint :required :property action)
    (trigger :constraint :required :property trigger)
    (duration :constraint (and repeat) :property duration)
    (repeat :constraint (and duration) :property repeat)))
+
+(define-print-object alarm NIL "~a ~a~@[ x~d~]~@[ - ~a~]"
+  action trigger repeat duration)
 
 (define-component audio-alarm (alarm)
   ((attachment :constraint :optional :property attachment)))
@@ -100,6 +119,9 @@
    (offset-to :constraint :required :property offset-to)
    (offset-from :constraint :required :property offset-from)
    (tznames :constraint :multiple :property tzname)))
+
+(define-print-object time-zone-component NIL "~a ~a => ~a"
+  start offset-from offset-to)
 
 (define-component (time-zone-standard "STANDARD") (time-zone-component)
   ())
