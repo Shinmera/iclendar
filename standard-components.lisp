@@ -83,12 +83,12 @@
    (contact :property contact)))
 
 (define-component (time-zone "VTIMEZONE") (component-container)
-  ((tzid :constraint :required :property tzid)
+  ((uid :constraint :required :property tzid)
    (last-modification :property last-modification)
-   (tzurl :property tzurl)))
+   (url :property tzurl)))
 
 (define-print-object time-zone NIL "~a ~a"
-  tzid tzurl)
+  uid url)
 
 (define-component (alarm "VALARM") ()
   ((action :constraint :required :property action)
@@ -118,7 +118,7 @@
    (recurrence-rule :property recurrence-rule)
    (offset-to :constraint :required :property offset-to)
    (offset-from :constraint :required :property offset-from)
-   (tznames :constraint :multiple :property tzname)))
+   (tz-names :constraint :multiple :property tzname)))
 
 (define-print-object time-zone-component NIL "~a ~a => ~a"
   start offset-from offset-to)
