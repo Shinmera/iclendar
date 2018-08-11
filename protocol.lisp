@@ -7,9 +7,12 @@
 (in-package #:org.shirakumo.iclendar)
 
 (defun ensure-finalized (class)
-  (unless (c2mop:class-finalized-p class)
-    (c2mop:finalize-inheritance class))
-  class)
+  (let ((class (etypecase class
+                 (class class)
+                 (symbol (find-class class)))))
+    (unless (c2mop:class-finalized-p class)
+      (c2mop:finalize-inheritance class))
+    class))
 
 (defun find-direct-slot (name class)
   (find name (c2mop:class-direct-slots class) :key #'c2mop:slot-definition-name))
@@ -91,13 +94,13 @@
     effective-slot))
 
 (defclass property ()
-  ((value :initarg :value :accessor value :type 'text)
+  ((value :initarg :value :accessor value :type text)
    (x-parameters :initarg :x-parameters :initform (make-hash-table :test 'equalp) :accessor x-parameters))
   (:metaclass property-class))
 
 (defmacro define-property ((name identifier) &body body)
   `(defclass ,name (property)
-     ((value :type ',(getf body :type 'text))
+     ((value :type ,(getf body :type 'text))
       ,@(loop for name in (getf body :parameters)
               collect `(,name)))
      (:metaclass property-class)
@@ -109,47 +112,62 @@
   (:default-initargs
    :constraint :optional))
 
+(defmethod property-slot-value-type ((slot property-slot))
+  (dolist (slot (append (c2mop:class-direct-slots (find-class (property-type slot)))
+                        (c2mop:class-slots (find-class (property-type slot)))))
+    (when (and (eql 'value (c2mop:slot-definition-name slot))
+               (c2mop:slot-definition-type slot))
+      (return (c2mop:slot-definition-type slot)))))
+
 (defmethod check-slot-valid ((slot c2mop:standard-slot-definition) instance))
+
+(defmethod check-slot-value ((slot property-slot) value)
+  (unless (or (typep value (property-type slot))
+              (typep value (property-slot-value-type slot)))
+    (error "The value ~s for ~s is not a ~s or ~s."
+           value (c2mop:slot-definition-name slot) (property-type slot) (property-slot-value-type slot))))
 
 (defmethod check-slot-valid ((slot property-slot) instance)
   (let ((name (c2mop:slot-definition-name slot)))
-    (flet ((check-slot-value (&optional (value (slot-value instance name)))
-             (unless (typep value (property-type slot))
-               (error "The value ~s for ~s is not a ~s." value name (property-type slot)))))
-      (etypecase (constraint slot)
-        ((eql :required)
-         (unless (slot-boundp instance name)
-           (error "The property ~s is required." name))
-         (check-slot-value))
-        ((eql :optional)
-         (when (slot-boundp instance name)
-           (check-slot-value)))
-        ((eql :multiple)
-         (when (slot-boundp instance name)
-           (dolist (value (slot-value instance name))
-             (check-slot-value value))))
-        (cons
-         (when (slot-boundp instance name)
-           (ecase (first (constraint slot))
-             (not
-              (when (slot-boundp instance (second (constraint slot)))
-                (error "The property ~s does not allow ~s to be set as well."
-                       name (second (constraint slot)))))
-             (and
-              (unless (slot-boundp instance (constraint slot))
-                (error "The property ~s requires ~s to be set as well."
-                       name (constraint slot)))))
-           (check-slot-value)))))))
+    (etypecase (constraint slot)
+      ((eql :required)
+       (unless (slot-boundp instance name)
+         (error "The property ~s is required." name))
+       (check-slot-value slot (slot-value instance name)))
+      ((eql :optional)
+       (when (slot-boundp instance name)
+         (check-slot-value slot (slot-value instance name))))
+      ((eql :multiple)
+       (when (slot-boundp instance name)
+         (dolist (value (slot-value instance name))
+           (check-slot-value slot value))))
+      (cons
+       (when (slot-boundp instance name)
+         (ecase (first (constraint slot))
+           (not
+            (when (slot-boundp instance (second (constraint slot)))
+              (error "The property ~s does not allow ~s to be set as well."
+                     name (second (constraint slot)))))
+           (and
+            (unless (slot-boundp instance (constraint slot))
+              (error "The property ~s requires ~s to be set as well."
+                     name (constraint slot)))))
+         (check-slot-value slot (slot-value instance name)))))))
 
 (defmethod (setf c2mop:slot-value-using-class) :before (value (class standard-class) (object standard-object) (slot property-slot))
   (case (constraint slot)
     (:multiple
      (dolist (item value)
-       (unless (typep item (property-type slot))
-         (error "The value ~s for ~s is not a ~s." item (c2mop:slot-definition-name slot) (property-type slot)))))
+       (check-slot-value slot item)))
     (T
-     (unless (typep value (property-type slot))
-       (error "The value ~s for ~s is not a ~s." value (c2mop:slot-definition-name slot) (property-type slot))))))
+     (check-slot-value slot value))))
+
+(defmethod (setf c2mop:slot-value-using-class) (value (class standard-class) (object standard-object) (slot property-slot))
+  (if (typep value 'property)
+      (call-next-method)
+      ;; Coerce automatically.
+      (setf (c2mop:slot-value-using-class class object slot)
+            (make-instance (property-type slot) :value value))))
 
 (defmethod c2mop:slot-makunbound-using-class :before ((class standard-class) (object standard-object) (slot property-slot))
   (when (eql :required (constraint slot))
@@ -157,6 +175,16 @@
 
 (defclass direct-property-slot (c2mop:standard-direct-slot-definition property-slot)
   ())
+
+(defmethod initialize-instance :after ((slot direct-property-slot) &key)
+  ;; Push default initarg and accessor.
+  (let ((name (c2mop:slot-definition-name slot)))
+    (unless (c2mop:slot-definition-initargs slot)
+      (setf (c2mop:slot-definition-initargs slot) (list (intern (string name) :keyword))))
+    (unless (or (c2mop:slot-definition-readers slot)
+                (c2mop:slot-definition-writers slot))
+      (setf (c2mop:slot-definition-readers slot) (list name))
+      (setf (c2mop:slot-definition-writers slot) (list `(setf ,name))))))
 
 (defclass effective-property-slot (c2mop:standard-effective-slot-definition property-slot)
   ())
@@ -183,9 +211,10 @@
 
 (defmethod c2mop:compute-effective-slot-definition ((class component-class) id direct-slots)
   (let ((effective-slot (call-next-method)))
-    (when (typep effective-slot 'effective-parameter-slot)
-      (let ((super-slot (find-superclass-slot (c2mop:slot-definition-name effective-slot) class))
-            (direct-slot (find-direct-slot (c2mop:slot-definition-name effective-slot) class)))
+    (when (typep effective-slot 'effective-property-slot)
+      (let* ((name (c2mop:slot-definition-name effective-slot))
+             (super-slot (find-superclass-slot name class))
+             (direct-slot (find-direct-slot name class)))
         (labels ((copy-slot (from identifier)
                    (when (slot-boundp from identifier)
                      (setf (slot-value effective-slot identifier) (slot-value from identifier)))))
@@ -196,12 +225,14 @@
           ;; Then override
           (when direct-slot
             (copy-slot direct-slot 'constraint)
-            (copy-slot super-slot 'property-type))))
-      ;; Ensure we are valid.
-      (unless (and (find-class (property-type effective-slot) NIL)
-                   (c2mop:subclassp (find-class (property-type effective-slot)) (find-class 'property)))
-        (error "The property spec ~s for slot ~s does not denote a subclass of ~s."
-               (property-type effective-slot) (c2mop:slot-definition-name effective-slot) 'property)))
+            (copy-slot direct-slot 'property-type)))
+        ;; Ensure we are valid.
+        (unless (find-class (property-type effective-slot) NIL)
+          (error "The property spec ~s for slot ~s does not denote a class."
+                 (property-type effective-slot) name))
+        (unless (c2mop:subclassp (ensure-finalized (property-type effective-slot)) (find-class 'property))
+          (error "The property spec ~s for slot ~s does not denote a subclass of ~s."
+                 (property-type effective-slot) name 'property))))
     effective-slot))
 
 (defclass component ()
@@ -211,7 +242,7 @@
 (defmethod shared-initialize :after ((component component) slots &key)
   (declare (ignore slots))
   (dolist (slot (c2mop:class-slots (class-of component)))
-    (check-slot-valid component slot)))
+    (check-slot-valid slot component)))
 
 (defmethod identifier ((component component))
   (identifier (class-of component)))

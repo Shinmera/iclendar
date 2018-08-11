@@ -44,7 +44,6 @@
   :type (or date-time date)
   :parameters (value-type time-zone-identifier))
 
-;; FIXME: duplicate with duration type
 (define-property (duration "DURATION")
   :type time-span)
 
