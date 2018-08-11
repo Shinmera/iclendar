@@ -26,7 +26,7 @@
   :type (member :8bit :base64))
 
 (define-parameter (format-type "FMTTYPE")
-  :type cons)
+  :type string)
 
 (define-parameter (free/busy-type "FBTYPE")
   :type (or string (member :free :busy :busy-unavailable :busy-tentative)))

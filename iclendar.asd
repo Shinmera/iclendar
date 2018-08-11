@@ -22,5 +22,6 @@
                (:file "serializer")
                (:file "documentation"))
   :depends-on (:closer-mop
-               :trivial-gray-stream
+               :cl-base64
+               :trivial-gray-streams
                :documentation-utils))

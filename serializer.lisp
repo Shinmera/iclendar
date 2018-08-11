@@ -92,9 +92,36 @@
 (defmethod serialize-object ((object geo) stream)
   (format stream "~f;~f" (geo-lat object) (geo-lng object)))
 
-(defmethod serialize-object ((object property) stream)
+(defmethod serialize-object ((property property) stream)
   (format stream "~a~{;~a=\"~/iclendar::s/\"~}:~/iclendar::s/"
-          (identifier object) (parameters object) (value object))
+          (identifier property) (parameters property) (value property)))
+
+(defmethod serialize-object ((property attachment) stream)
+  (format stream "~a~{;~a=\"~/iclendar::s/\"~}"
+          (identifier property) (parameters property))
+  (etypecase (value property)
+    ((or pathname (vector (unsigned-byte 8)))
+     ;; Force parameters
+     (unless (slot-boundp property 'encoding)
+       (format stream ";ENCODING=BASE64"))
+     (unless (slot-boundp property 'value-type)
+       (format stream ";VALUE=BINARY"))
+     (format stream ":")
+     (etypecase (value property)
+       (pathname
+        ;; CL-BASE64 can't do stream-to-stream, so we need to load into memory first.
+        (with-open-file (stream (value property) :element-type '(unsigned-byte 8))
+          (loop with buffer = (make-array 4096 :element-type '(unsigned-byte 8) :fill-pointer 4096 :adjustable T)
+                for start = 0 then read
+                for read = (read-sequence buffer stream :start start)
+                while (= read (length buffer))
+                do (adjust-array buffer (+ (length buffer) 4096))
+                finally (setf (fill-pointer buffer) read)
+                        (cl-base64:usb8-array-to-base64-stream buffer stream))))
+       ((vector (unsigned-byte 8))
+        (cl-base64:usb8-array-to-base64-stream (value property) stream))))
+    (string
+     (format stream ":~a" (value property))))
   (terpri stream))
 
 (defmethod serialize-object :around ((component component) stream)
@@ -111,5 +138,3 @@
 (defmethod serialize-object :after ((component component-container) stream)
   (dolist (component (components component))
     (serialize-object component stream)))
-
-;; FIXME: special case attachment encoding
