@@ -26,7 +26,10 @@
    (stamp :constraint :required :property stamp)
    (start :constraint :required :property start)
    (uid :constraint :required :property uid)
-   (url :property url)))
+   (url :property url))
+  (:default-initargs
+   :stamp (iclendar:make-date-time)
+   :uid (make-uid)))
 
 (define-print-object calendar-component NIL "~a ~a"
   uid start)
