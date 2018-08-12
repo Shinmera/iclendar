@@ -9,7 +9,7 @@
 (define-property (action "ACTION"))
 
 (define-property (attachment "ATTACH")
-  :type attachment
+  :type attachment-value
   :parameters (encoding value-type format-type))
 
 (define-property (attendee "ATTENDEE")
@@ -20,7 +20,7 @@
   :parameters (language))
 
 (define-property (classification "CLASS")
-  :type (or string (member :public :private :conditential)))
+  :type (or string (member :public :private :confitential)))
 
 (define-property (comment "COMMENT")
   :parameters (alternate-representation language))
@@ -122,7 +122,8 @@
 (define-property (summary "SUMMARY")
   :parameters (alternate-representation language))
 
-(define-property (transparency "TRANSP"))
+(define-property (transparency "TRANSP")
+  :type (or string (member :opaque :transparent)))
 
 (define-property (transport-method "METHOD"))
 

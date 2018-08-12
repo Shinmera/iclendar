@@ -191,7 +191,7 @@
    #:year-day-list
    #:week-list
    #:month-list
-   #:attachment
+   #:attachment-value
    #:address
    #:week-day
    #:week-day-num

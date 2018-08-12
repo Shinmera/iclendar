@@ -25,7 +25,7 @@
 (define-list-type week-list (integer 1 53))
 (define-list-type month-list (integer 1 12))
 
-(deftype attachment ()
+(deftype attachment-value ()
   '(or uri pathname (vector (unsigned-byte 8))))
 
 (deftype address ()
