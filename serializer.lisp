@@ -33,7 +33,10 @@
     (T (format stream "~:@(~a~)" (symbol-name symbol)))))
 
 (defmethod serialize-object ((string string) stream)
-  (write-string string stream))
+  (loop for char across string
+        do (when (find char ";,\\")
+             (write-char #\\ stream))
+           (write-char char stream)))
 
 (defmethod serialize-object ((object week-day-num) stream)
   (format stream "~@[~d~]~a" (week-day-num-week object)
