@@ -107,6 +107,3 @@
 
 (deftype text ()
   'string)
-
-(deftype language ()
-  'string)

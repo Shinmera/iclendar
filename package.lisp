@@ -251,5 +251,4 @@
    #:make-geo
    #:geo-lat
    #:geo-lng
-   #:text
-   #:language))
+   #:text))

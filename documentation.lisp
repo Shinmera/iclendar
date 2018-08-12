@@ -1235,7 +1235,7 @@ See FREE/BUSY-PERIOD")
   (function language
     "This parameter defines the language of the property's value.
 
-Must be a LANGUAGE.
+Must be a TEXT.
 
 From RFC5545:
   This parameter identifies the language of the text in
@@ -1257,7 +1257,7 @@ See ORGANIZER
 See RESOURCE
 See SUMMARY
 See TZNAME
-See LANGUAGE")
+See TEXT")
 
   (function membership
     "This parameter identifies people who are a member of the property.
@@ -3522,10 +3522,5 @@ See GEO")
 
   (type text
     "Type for text values.
-
-This is just a string.")
-
-  (type language
-    "Type for language codes.
 
 This is just a string."))

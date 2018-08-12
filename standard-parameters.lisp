@@ -32,7 +32,7 @@
   :type (or string (member :free :busy :busy-unavailable :busy-tentative)))
 
 (define-parameter (language "LANGUAGE")
-  :type language)
+  :type text)
 
 (define-parameter (membership "MEMBER")
   :type address-list)
