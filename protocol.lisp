@@ -10,10 +10,11 @@
   (let ((stream (gensym "STREAM")))
     `(defmethod print-object ((,class ,class) ,stream)
        (print-unreadable-object (,class ,stream :type T :identity ,identity)
-         (with-accessors ,(loop for arg in args
-                                when (symbolp arg)
-                                collect (list arg arg))
-             ,class
+         (symbol-macrolet ,(loop for arg in args
+                                 when (symbolp arg)
+                                 collect `(,arg (if (slot-boundp ,class ',arg)
+                                                    (,arg ,class)
+                                                    '<unbound>)))
            (let ((*print-property-value-only* T))
              (format ,stream ,format-string ,@args)))))))
 
