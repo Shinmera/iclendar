@@ -97,7 +97,8 @@
 
 (defmethod serialize-object ((property property) stream)
   (format stream "~a~{;~a=\"~/iclendar::s/\"~}:~/iclendar::s/"
-          (identifier property) (parameters property) (value property)))
+          (identifier property) (parameters property) (value property))
+  (terpri stream))
 
 (defmethod serialize-object ((property attachment) stream)
   (format stream "~a~{;~a=\"~/iclendar::s/\"~}"
