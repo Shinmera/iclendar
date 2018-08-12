@@ -6,6 +6,14 @@
 
 (in-package #:org.shirakumo.iclendar)
 
+(defun c-day () (nth-value 6 (decode-universal-time (get-universal-time) 0)))
+(defun c-year () (nth-value 5 (decode-universal-time (get-universal-time) 0)))
+(defun c-month () (nth-value 4 (decode-universal-time (get-universal-time) 0)))
+(defun c-date () (nth-value 3 (decode-universal-time (get-universal-time) 0)))
+(defun c-hour () (nth-value 2 (decode-universal-time (get-universal-time) 0)))
+(defun c-minute () (nth-value 1 (decode-universal-time (get-universal-time) 0)))
+(defun c-second () (nth-value 0 (decode-universal-time (get-universal-time) 0)))
+
 (defmacro define-list-type (name inner)
   (let ((predicate (intern (let ((*print-case* (readtable-case *readtable*)))
                              (format NIL "~a-~a" name 'p)))))
@@ -42,18 +50,18 @@
   week-day-num-week week-day-num-week-day)
 
 (defstruct (date)
-  (year 1900 :type (integer 0))
-  (month 1 :type (integer 1 12))
-  (date 1 :type (integer 1 31)))
+  (year (c-year) :type (integer 0))
+  (month (c-month) :type (integer 1 12))
+  (date (c-date) :type (integer 1 31)))
 
 (define-print-object date NIL "~d.~2,'0d.~2,'0d"
   date-year date-month date-date)
 
 (defstruct (date-time (:include date))
-  (hour 0 :type (integer 0 23))
-  (minute 0 :type (integer 0 59))
-  (second 0 :type (integer 0 60))
-  (utc-p NIL :type boolean))
+  (hour (c-hour) :type (integer 0 23))
+  (minute (c-minute) :type (integer 0 59))
+  (second (c-second) :type (integer 0 60))
+  (utc-p T :type boolean))
 
 (define-print-object date-time NIL "~d.~2,'0d.~2,'0d ~d:~2,'0d:~2,'0d~@[ UTC~]"
   date-time-year date-time-month date-time-date date-time-hour date-time-minute date-time-second
