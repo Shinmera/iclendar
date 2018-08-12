@@ -15,12 +15,9 @@ The body may contain a plist of additional information. Currently the following
 keys are recognised:
 
   :TYPE     --- The type of the slot's value. Defaults to TEXT
-  :INITARGS --- A list of initarg names. Defaults to the keyword version of the
-                NAME
-  :READERS  --- A list of names for slot readers. Defaults to a list of simply
-                NAME
-  :WRITERS  --- A list of names for slot writers. Defaults to a list of simply
-                (setf NAME)
+
+A parameter will automatically push a reader of the same name, a writer of
+the name (setf NAME), and an initarg of the name but in keyword place.
 
 See TEXT")
 
@@ -144,6 +141,8 @@ The output may be one of the following types:
 
 The serialisation is handled by SERIALIZE-OBJECT.
 
+Returns the object that was passed, unless the output is NIL.
+
 See SERIALIZE-OBJECT")
 
   (function serialize-object
@@ -153,6 +152,8 @@ This function has methods for each of the standard-types, as well as for the
 generic property and component classes defined by the iCalendar standard. If
 you need special behaviour for the serialisation of a new type, property, or
 component, you should add appropriate methods to this function.
+
+Always returns the object parameter.
 
 See SERIALIZE"))
 
@@ -208,6 +209,13 @@ See VERSION")
 
   (type calendar-component
     "This is a mixin class for common properties in subclasses.
+
+The required STAMP and UID fields are automatically filled with default values:
+
+  STAMP -- (ICLENDAR:MAKE-DATE-TIME)
+  UID   -- (ICLENDAR::MAKE-UID)
+
+MAKE-UID returns a random UUID-like string.
 
 See ATTENDEES
 See COMMENTS
