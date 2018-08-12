@@ -8,6 +8,10 @@
 
 (defgeneric serialize-object (object stream))
 
+(defmethod serialize-object :around (object stream)
+  (call-next-method)
+  object)
+
 (defun s (stream object &rest args)
   (declare (ignore args))
   (serialize-object object stream))
@@ -96,12 +100,12 @@
   (format stream "~f;~f" (geo-lat object) (geo-lng object)))
 
 (defmethod serialize-object ((property property) stream)
-  (format stream "~a~{;~a=\"~/iclendar::s/\"~}:~/iclendar::s/"
+  (format stream "~a~{;~{~a=\"~/iclendar::s/\"~}~}:~/iclendar::s/"
           (identifier property) (parameters property) (value property))
   (terpri stream))
 
 (defmethod serialize-object ((property attachment) stream)
-  (format stream "~a~{;~a=\"~/iclendar::s/\"~}"
+  (format stream "~a~{;~{~a=\"~/iclendar::s/\"~}~}"
           (identifier property) (parameters property))
   (etypecase (value property)
     ((or pathname (vector (unsigned-byte 8)))
@@ -131,9 +135,10 @@
 (defmethod serialize-object :around ((component component) stream)
   (format stream "BEGIN:~a" (identifier component))
   (terpri stream)
-  (call-next-method)
-  (format stream "END:~a" (identifier component))
-  (terpri stream))
+  (let ((value (call-next-method)))
+    (format stream "END:~a" (identifier component))
+    (terpri stream)
+    value))
 
 (defmethod serialize-object ((component component) stream)
   (dolist (property (properties component))
