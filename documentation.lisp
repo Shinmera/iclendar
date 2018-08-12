@@ -1059,59 +1059,185 @@ See COMPONENT"))
 ;; standard-parameters.lisp
 (docs:define-docs
   (function alternate-representation
-    "
+    "This parameter links to an alternate representation of the value's contents.
+
+The value must be TEXT.
+
+From RFC5545:
+  This parameter specifies a URI that points to an
+  alternate representation for a textual property value.  A property
+  specifying this parameter MUST also include a value that reflects
+  the default representation of the text value.  The URI parameter
+  value MUST be specified in a quoted-string.
+
+    Note: While there is no restriction imposed on the URI schemes
+    allowed for this parameter, Content Identifier (CID) [RFC2392],
+    HTTP [RFC2616], and HTTPS [RFC2818] are the URI schemes most
+    commonly used by current implementations.
 
 See COMMENT
 See CONTACT
 See DESCRIPTION
 See LOCATION
 See RESOURCE
-See SUMMARY")
+See SUMMARY
+See TEXT")
 
   (function common-name
-    "
+    "This parameter defines a common name between the property and a user.
+
+The value must be TEXT.
+
+From RFC5545:
+  This parameter can be specified on properties with a
+  CAL-ADDRESS value type.  The parameter specifies the common name
+  to be associated with the calendar user specified by the property.
+  The parameter value is text.  The parameter value can be used for
+  display text to be associated with the calendar address specified
+  by the property.
 
 See ATTENDEE
-See ORGANIZER")
+See ORGANIZER
+See TEXT")
 
   (function calendar-user-type
-    "
+    "This parameter defines the type of user of the property.
+
+The value must be a string or one of :INDIVIDUAL :GROUP :RESOURCE :ROOM :UNKNOWN.
+
+From RF5545:
+  This parameter can be specified on properties with a
+  CAL-ADDRESS value type.  The parameter identifies the type of
+  calendar user specified by the property.  If not specified on a
+  property that allows this parameter, the default is INDIVIDUAL.
+  Applications MUST treat x-name and iana-token values they don't
+  recognize the same way as they would the UNKNOWN value.
 
 See ATTENDEE")
 
   (function delegator
-    "
+    "This parameter defines users who have delegated the property.
 
-See ATTENDEE")
+The value must be an ADDRESS-LIST.
 
-  (function delegatee
-    "
-
-See ATTENDEE")
-
-  (function directory-entry
-    "
+From RFC5545:
+  This parameter can be specified on properties with a
+  CAL-ADDRESS value type.  This parameter specifies those calendar
+  users that have delegated their participation in a group-scheduled
+  event or to-do to the calendar user specified by the property.
+  The individual calendar address parameter values MUST each be
+  specified in a quoted-string.
 
 See ATTENDEE
-See ORGANIZER")
+See ADDRESS-LIST")
+
+  (function delegatee
+    "This parameter defines users to whom this property has been delegated.
+
+The value must be an ADDRESS-LIST.
+
+From RFC5545:
+  This parameter can be specified on properties with a
+  CAL-ADDRESS value type.  This parameter specifies those calendar
+  users whom have been delegated participation in a group-scheduled
+  event or to-do by the calendar user specified by the property.
+  The individual calendar address parameter values MUST each be
+  specified in a quoted-string.
+
+See ATTENDEE
+See ADDRESS-LIST")
+
+  (function directory-entry
+    "This parameter associates a directory with the property.
+
+The value must be a URI.
+
+From RFC5545:
+  This parameter can be specified on properties with a
+  CAL-ADDRESS value type.  The parameter specifies a reference to
+  the directory entry associated with the calendar user specified by
+  the property.  The parameter value is a URI.  The URI parameter
+  value MUST be specified in a quoted-string.
+
+     Note: While there is no restriction imposed on the URI schemes
+     allowed for this parameter, CID [RFC2392], DATA [RFC2397], FILE
+     [RFC1738], FTP [RFC1738], HTTP [RFC2616], HTTPS [RFC2818], LDAP
+     [RFC4516], and MID [RFC2392] are the URI schemes most commonly
+     used by current implementations.
+
+See ATTENDEE
+See ORGANIZER
+See URI")
 
   (function encoding
-    "
+    "This parameter defines the encoding of the property value.
+
+Must be one of :8BIT :BASE64.
+
+From RFC5545:
+  This property parameter identifies the inline encoding
+  used in a property value.  The default encoding is \"8BIT\",
+  corresponding to a property value consisting of text.  The
+  \"BASE64\" encoding type corresponds to a property value encoded
+  using the \"BASE64\" encoding defined in [RFC2045].
+
+  If the value type parameter is \";VALUE=BINARY\", then the inline
+  encoding parameter MUST be specified with the value
+  \";ENCODING=BASE64\".
 
 See ATTACHMENT")
 
   (function format-type
-    "
+    "This parameter defines the MIME type of the property value.
+
+Must be a mime type as a string.
+
+From RFC5545:
+  This parameter can be specified on properties that are
+  used to reference an object.  The parameter specifies the media
+  type [RFC4288] of the referenced object.  For example, on the
+  ATTACH property, an FTP type URI value does not, by itself,
+  necessarily convey the type of content associated with the
+  resource.  The parameter value MUST be the text for either an
+  IANA-registered media type or a non-standard media type.
 
 See ATTACHMENT")
 
   (function free/busy-type
-    "
+    "This parameter decides whether the free/busy-duration property is free or busy.
+
+Must be a string or one of the following: :FREE :BUSY :BUSY-UNAVAILABLE :BUSY-TENTATIVE.
+
+From RFC5545:
+  This parameter specifies the free or busy time type.
+  The value FREE indicates that the time interval is free for
+  scheduling.  The value BUSY indicates that the time interval is
+  busy because one or more events have been scheduled for that
+  interval.  The value BUSY-UNAVAILABLE indicates that the time
+  interval is busy and that the interval can not be scheduled.  The
+  value BUSY-TENTATIVE indicates that the time interval is busy
+  because one or more events have been tentatively scheduled for
+  that interval.  If not specified on a property that allows this
+  parameter, the default is BUSY.  Applications MUST treat x-name
+  and iana-token values they don't recognize the same way as they
+  would the BUSY value.
 
 See FREE/BUSY-PERIOD")
 
   (function language
-    "
+    "This parameter defines the language of the property's value.
+
+Must be a LANGUAGE.
+
+From RFC5545:
+  This parameter identifies the language of the text in
+  the property value and of all property parameter values of the
+  property.  The value of the LANGUAGE property parameter is that
+  defined in [RFC5646].
+
+  For transport in a MIME entity, the Content-Language header field
+  can be used to set the default language for the entire body part.
+  Otherwise, no default language is assumed.
 
 See ATTENDEE
 See CATEGORIES
@@ -1122,49 +1248,205 @@ See LOCATION
 See ORGANIZER
 See RESOURCE
 See SUMMARY
-See TZNAME")
+See TZNAME
+See LANGUAGE")
 
   (function membership
-    "
+    "This parameter identifies people who are a member of the property.
 
-See ATTENDEE")
+Must be an ADDRESS-LIST.
+
+From RFC5545:
+  This parameter can be specified on properties with a
+  CAL-ADDRESS value type.  The parameter identifies the groups or
+  list membership for the calendar user specified by the property.
+  The parameter value is either a single calendar address in a
+  quoted-string or a COMMA-separated list of calendar addresses,
+  each in a quoted-string.  The individual calendar address
+  parameter values MUST each be specified in a quoted-string.
+
+See ATTENDEE
+See ADDRESS-LIST")
 
   (function participation-status
-    "
+    "This parameter describes the status of a participation.
+
+Must be a string or one of :NEEDS-ACTION :ACCEPTED :DECLINED :TENTATIVE
+:DELEGATED :COMPLETED :IN-PROCESS.
+
+From RFC5545:
+  This parameter can be specified on properties with a
+  CAL-ADDRESS value type.  The parameter identifies the
+  participation status for the calendar user specified by the
+  property value.  The parameter values differ depending on whether
+  they are associated with a group-scheduled VEVENT, VTODO, or
+  VJOURNAL.  The values MUST match one of the values allowed for
+  the given calendar component.  If not specified on a property that
+  allows this parameter, the default value is NEEDS-ACTION.
+  Applications MUST treat x-name and iana-token values they don't
+  recognize the same way as they would the NEEDS-ACTION value.
 
 See ATTENDEE")
 
   (function recurrence-identifier-range
-    "")
+    "This parameter describes the range the recurrence property affects.
+
+Must be :THIS-AND-FUTURE.
+
+From RFC5545:
+  This parameter can be specified on a property that
+  specifies a recurrence identifier.  The parameter specifies the
+  effective range of recurrence instances that is specified by the
+  property.  The effective range is from the recurrence identifier
+  specified by the property.  If this parameter is not specified on
+  an allowed property, then the default range is the single instance
+  specified by the recurrence identifier value of the property.  The
+  parameter value can only be \"THISANDFUTURE\" to indicate a range
+  defined by the recurrence identifier and all subsequent instances.
+  The value \"THISANDPRIOR\" is deprecated by this revision of
+  iCalendar and MUST NOT be generated by applications.")
 
   (function trigger-on
-    "
+    "This parameter describes when the trigger should be applied.
+
+Must be one of :START :END.
+
+From RFC5545:
+  This parameter can be specified on properties that
+  specify an alarm trigger with a \"DURATION\" value type.  The
+  parameter specifies whether the alarm will trigger relative to the
+  start or end of the calendar component.  The parameter value START
+  will set the alarm to trigger off the start of the calendar
+  component; the parameter value END will set the alarm to trigger
+  off the end of the calendar component.  If the parameter is not
+  specified on an allowable property, then the default is START.
 
 See TRIGGER")
 
   (function relationship-type
-    "
+    "This parameter describes the type of relationship this property has to another calendar.
+
+Must be a string or one of :PARENT :CHILD :SIBLING.
+
+From RFC5545:
+  This parameter can be specified on a property that
+  references another related calendar.  The parameter specifies the
+  hierarchical relationship type of the calendar component
+  referenced by the property.  The parameter value can be PARENT, to
+  indicate that the referenced calendar component is a superior of
+  calendar component; CHILD to indicate that the referenced calendar
+  component is a subordinate of the calendar component; or SIBLING
+  to indicate that the referenced calendar component is a peer of
+  the calendar component.  If this parameter is not specified on an
+  allowable property, the default relationship type is PARENT.
+  Applications MUST treat x-name and iana-token values they don't
+  recognize the same way as they would the PARENT value.
 
 See RELATED")
 
   (function role
-    "
+    "This parameter describes the role of the property's value in relation to the component.
+
+Must be a string or one of :CHAIR :REQ-PARTICIPANT :OPT-PARTICIPANT :NON-PARTICIPANT.
+
+From RFC5545:
+  This parameter can be specified on properties with a
+  CAL-ADDRESS value type.  The parameter specifies the participation
+  role for the calendar user specified by the property in the group
+  schedule calendar component.  If not specified on a property that
+  allows this parameter, the default value is REQ-PARTICIPANT.
+  Applications MUST treat x-name and iana-token values they don't
+  recognize the same way as they would the REQ-PARTICIPANT value.
 
 See ATTENDEE")
 
   (function reply-requested
-    "
+    "This parameter describes whether a reply has been requested of the property's users.
+
+Must be a BOOLEAN.
+
+From RFC5545:
+  This parameter can be specified on properties with a
+  CAL-ADDRESS value type.  The parameter identifies the expectation
+  of a reply from the calendar user specified by the property value.
+  This parameter is used by the \"Organizer\" to request a
+  participation status reply from an \"Attendee\" of a group-scheduled
+  event or to-do.  If not specified on a property that allows this
+  parameter, the default value is FALSE.
 
 See ATTENDEE")
 
   (function sent-by
-    "
+    "This parameter describes who this property was sent by.
+
+Must be an ADDRESS.
+
+From RFC5545:
+  This parameter can be specified on properties with a
+  CAL-ADDRESS value type.  The parameter specifies the calendar user
+  that is acting on behalf of the calendar user specified by the
+  property.  The parameter value MUST be a mailto URI as defined in
+  [RFC2368].  The individual calendar address parameter values MUST
+  each be specified in a quoted-string.
 
 See ATTENDEE
-See ORGANIZER")
+See ORGANIZER
+See ADDRESS")
 
   (function time-zone-identifier
-    "
+    "This parameter describes a time zone identifier for the property's value.
+
+Must be a TEXT.
+
+From RFC5545:
+  This parameter MUST be specified on the DTSTART,
+  DTEND, DUE, EXDATE, and RDATE properties when either a
+  DATE-TIME or TIME value type is specified and when the value is
+  neither a UTC or a floating time.  Refer to the DATE-TIME or
+  TIME value type definition for a description of UTC and floating
+  time formats.  This property parameter specifies a text value
+  that uniquely identifies the VTIMEZONE calendar component to be
+  used when evaluating the time portion of the property.  The value
+  of the TZID property parameter will be equal to the value of the
+  TZID property for the matching time zone definition.  An
+  individual VTIMEZONE calendar component MUST be specified for
+  each unique TZID parameter value specified in the iCalendar
+  object.
+
+  The parameter MUST be specified on properties with a DATE-TIME
+  value if the DATE-TIME is not either a UTC or a floating time.
+  Failure to include and follow VTIMEZONE definitions in iCalendar
+  objects may lead to inconsistent understanding of the local time
+  at any given location.
+
+  The presence of the SOLIDUS character as a prefix, indicates that
+  this TZID represents a unique ID in a globally defined time zone
+  registry (when such registry is defined).
+
+     Note: This document does not define a naming convention for
+     time zone identifiers.  Implementers may want to use the naming
+     conventions defined in existing time zone specifications such
+     as the public-domain TZ database [TZDB].  The specification of
+     globally unique time zone identifiers is not addressed by this
+     document and is left for future study.
+
+  The following are examples of this property parameter:
+
+   DTSTART;TZID=America/New_York:19980119T020000
+
+   DTEND;TZID=America/New_York:19980119T030000
+
+  The TZID property parameter MUST NOT be applied to DATE
+  properties and DATE-TIME or TIME properties whose time values are
+  specified in UTC.
+
+  The use of local time in a DATE-TIME or TIME value without the
+  TZID property parameter is to be interpreted as floating time,
+  regardless of the existence of VTIMEZONE calendar components in
+  the iCalendar object.
+
+  For more information, see the sections on the value types DATE-
+  TIME and TIME.
 
 See DUE
 See END
@@ -1172,10 +1454,29 @@ See EXCEPTION-DATE
 See RECURRENCE-ID
 See RECURRENCE-DATE
 See START
-See TRIGGER")
+See TRIGGER
+See TEXT")
 
   (function value-type
-    "
+    "This parameter explicitly defines the type of the property's value.
+
+Must be a string or one of :BINARY :BOOLEAN :CAL-ADDRESS :DATE :DATE-TIME
+:DURATION :FLOAT :INTEGER :PERIOD :RECUR :TEXT :TIME :URI :UTC-OFFSET.
+
+From RFC5545:
+  This parameter specifies the value type and format of
+  the property value.  The property values MUST be of a single value
+  type.  For example, a RDATE property cannot have a combination
+  of DATE-TIME and TIME value types.
+
+  If the property's value is the default value type, then this
+  parameter need not be specified.  However, if the property's
+  default value type is overridden by some other allowable value
+  type, then this parameter MUST be specified.
+
+  Applications MUST preserve the value data for x-name and iana-
+  token values that they don't recognize without attempting to
+  interpret or parse the value data.
 
 See ATTACHMENT
 See DTEND
