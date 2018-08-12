@@ -37,9 +37,11 @@
        (print-unreadable-object (,class ,stream :type T :identity ,identity)
          (symbol-macrolet ,(loop for arg in args
                                  when (symbolp arg)
-                                 collect `(,arg (if (slot-boundp ,class ',arg)
+                                 collect `(,arg (if (typep ,class 'structure-object)
                                                     (,arg ,class)
-                                                    '<unbound>)))
+                                                    (if (slot-boundp ,class ',arg)
+                                                        (,arg ,class)
+                                                        '<unbound>))))
            (let ((*print-property-value-only* T))
              (format ,stream ,format-string ,@args)))))))
 
