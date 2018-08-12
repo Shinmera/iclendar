@@ -698,142 +698,284 @@ See TRIGGER"))
 ;; standard-properties.lisp
 (docs:define-docs
   (type action
-    "")
+    "
+
+See PROPERTY")
 
   (type attachment
-    "")
+    "
+
+See PROPERTY
+See ENCODING
+See VALUE-TYPE
+See FORMAT-TYPE")
 
   (type attendee
-    "")
+    "
+
+See PROPERTY
+See LANGUAGE
+See CALENDAR-USER-TYPE
+See MEMBERSHIP
+See ROLE
+See PARTICIPATION-STATUS
+See REPLY-REQUESTED
+See DELEGATEE
+See DELEGATOR
+See SENT-BY
+See COMMON-NAME
+See DIRECTORY-ENTRY")
 
   (type category
-    "")
+    "
+
+See PROPERTY
+See LANGUAGE")
 
   (type classification
-    "")
+    "
+
+See PROPERTY")
 
   (type comment
-    "")
+    "
+
+See PROPERTY
+See ALTERNATE-REPRESENTATION
+See LANGUAGE")
 
   (type completed
-    "")
+    "
+
+See PROPERTY")
 
   (type completeness
-    "")
+    "
+
+See PROPERTY")
 
   (type contact
-    "")
+    "
+
+See PROPERTY
+See ALTERNATE-REPRESENTATION
+See LANGUAGE")
 
   (type created
-    "")
+    "
+
+See PROPERTY")
 
   (type description
-    "")
+    "
+
+See PROPERTY
+See ALTERNATE-REPRESENTATION
+See LANGUAGE")
 
   (type due
-    "")
+    "
+
+See PROPERTY
+See VALUE-TYPE
+See TIME-ZONE-IDENTIFIER")
 
   (type duration
-    "")
+    "
+
+See PROPERTY")
 
   (type end
-    "")
+    "
+
+See PROPERTY
+See VALUE-TYPE
+See TIME-ZONE-IDENTIFIER")
 
   (type exception-date
-    "")
+    "
+
+See PROPERTY
+See VALUE-TYPE
+See TIME-ZONE-IDENTIFIER")
 
   (type free/busy-period
-    "")
+    "
+
+See PROPERTY
+See FREE/BUSY-TYPE")
 
   (type geographic-location
-    "")
+    "
+
+See PROPERTY")
 
   (type last-modification
-    "")
+    "
+
+See PROPERTY")
 
   (type location
-    "")
+    "
+
+See PROPERTY
+See ALTERNATE-REPRESENTATION
+See LANGUAGE")
 
   (type offset-from
-    "")
+    "
+
+See PROPERTY")
 
   (type offset-to
-    "")
+    "
+
+See PROPERTY")
 
   (type organizer
-    "")
+    "
+
+See PROPERTY
+See LANGUAGE
+See COMMON-NAME
+See DIRECTORY-ENTRY
+See SENT-BY")
 
   (type priority
-    "")
+    "
+
+See PROPERTY")
 
   (type product
-    "")
+    "
+
+See PROPERTY")
 
   (type recurrence-id
-    "")
+    "
+
+See PROPERTY
+See VALUE-TYPE
+See TIME-ZONE-IDENTIFIER
+See RECURRENCE-IDENTIFIER-RANGE")
 
   (type recurrence-date
-    "")
+    "
+
+See PROPERTY
+See VALUE-TYPE
+See TIME-ZONE-IDENTIFIER")
 
   (type recurrence-rule
-    "")
+    "
+
+See PROPERTY")
 
   (type related
-    "")
+    "
+
+See PROPERTY
+See RELATIONSHIP-TYPE")
 
   (type repeat
-    "")
+    "
+
+See PROPERTY")
 
   (type request-status
-    "")
+    "
+
+See PROPERTY")
 
   (type resource
-    "")
+    "
+
+See PROPERTY
+See ALTERNATE-REPRESENTATION
+See LANGUAGE")
 
   (type scale
-    "")
+    "
+
+See PROPERTY")
 
   (type sequence-number
-    "")
+    "
+
+See PROPERTY")
 
   (type stamp
-    "")
+    "
+
+See PROPERTY")
 
   (type start
-    "")
+    "
+
+See PROPERTY
+See VALUE-TYPE
+See TIME-ZONE-IDENTIFIER")
 
   (type status
-    "")
+    "
+
+See PROPERTY")
 
   (type summary
-    "")
+    "
+
+See PROPERTY
+See ALTERNATE-REPRESENTATION
+See LANGUAGE")
 
   (type transparency
-    "")
+    "
+
+See PROPERTY")
 
   (type transport-method
-    "")
+    "
+
+See PROPERTY")
 
   (type trigger
-    "")
+    "
+
+See PROPERTY
+See VALUE-TYPE
+See TIME-ZONE-IDENTIFIER
+See TRIGGER-ON")
 
   (type tzid
-    "")
+    "
+
+See PROPERTY")
 
   (type tzname
-    "")
+    "
+
+See PROPERTY
+See LANGUAGE")
 
   (type tzurl
-    "")
+    "
+
+See PROPERTY")
 
   (type uid
-    "")
+    "
+
+See PROPERTY")
 
   (type url
-    "")
+    "
+
+See PROPERTY")
 
   (type version
-    ""))
+    "
+
+See PROPERTY"))
 
 ;; standard-types.lisp
 (docs:define-docs
