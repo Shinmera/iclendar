@@ -79,3 +79,10 @@ You can get an alist of all parameters of a property using `parameters`.
 A component contains a number of properties, potential sub-components, and a slot called `x-properties` for extraneous, non-standard properties. Each property is modelled as a slot that maintains relational constraints of the property within the component. You can define additional components with `define-component`. A slot in a component definition is turned into a property-slot if the initarg `:property` is present. If it is, the initarg's value must be the name of a `property` subclass. A property-slot also takes the `:constraint` initarg, which describes whether it is `:required`, `:optional`, or `:multiple` value. The constraint may also be one of `(not NAME)` or `(and NAME)` if the property may not be or must be set alongside another.
 
 You can get a list of all properties of a component using `properties`.
+
+## Serialisation
+Serialisation of components, properties, and their types is handled by the generic function `serialize-object`. The stream that is passed to it should automatically ensure the proper line-folding behaviour iCalendar expects, and make sure `terpri` calls produce the proper `CRLF` output. When writing to this stream, Returns are ignored, and Linefeeds are turned into "content new lines", meaning the literal characters `\` and `n`. 
+
+When writing textual values to the stream, you should output the string using `serialize-object` as well, so that it can properly escape backslashes, semi-colons, and commas.
+
+Typically, if you merely create new parameters, properties, and components, you will not need to touch any of these functions as the standard behaviour is generic enough to cover your bases. However, if you add a new value type, you will most definitely need to add an appropriate `serialize-object` method for it.
