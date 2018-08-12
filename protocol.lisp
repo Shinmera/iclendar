@@ -153,10 +153,11 @@
            (error "When the property ~s is set, it must have a property for a value."
                   name))))
       ((eql :multiple)
-       (when (slot-boundp instance name)
-         (unless (listp (slot-value instance name))
-           (error "When the property ~s is set, it must have a list for a value."
-                  name))))
+       (cond ((not (slot-boundp instance name))
+              (setf (slot-value instance name) ()))
+             ((not (listp (slot-value instance name)))
+              (error "When the property ~s is set, it must have a list for a value."
+                     name))))
       (cons
        (when (slot-boundp instance name)
          (ecase (first (constraint slot))
