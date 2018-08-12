@@ -10,7 +10,7 @@
 
 (define-property (attachment "ATTACH")
   :type attachment
-  :parameters (encoding value-type))
+  :parameters (encoding value-type format-type))
 
 (define-property (attendee "ATTENDEE")
   :type address

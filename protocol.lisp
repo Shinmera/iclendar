@@ -60,14 +60,17 @@
   ())
 
 (defmacro define-parameter ((name identifier) &body body)
-  `(defclass ,name (direct-parameter-slot)
-     ()
-     (:default-initargs
-      :type ',(getf body :type 'text)
-      :initargs '(,(intern (string name) :keyword))
-      :readers '(,name)
-      :writers '((setf ,name))
-      :identifier ,identifier)))
+  (destructuring-bind (&key (type 'text) (initargs (list (intern (string name) :keyword)))
+                            (readers (list name)) (writers (list `(setf ,name))))
+      body
+    `(defclass ,name (direct-parameter-slot)
+       ()
+       (:default-initargs
+        :type ',type
+        :initargs ',initargs
+        :readers ',readers
+        :writers ',writers
+        :identifier ,identifier))))
 
 (defclass effective-parameter-slot (c2mop:standard-effective-slot-definition parameter-slot)
   ())
@@ -134,12 +137,13 @@
   (identifier (class-of property)))
 
 (defmacro define-property ((name identifier) &body body)
-  `(defclass ,name (property)
-     ((value :type ,(getf body :type 'text))
-      ,@(loop for name in (getf body :parameters)
-              collect `(,name)))
-     (:metaclass property-class)
-     (:identifier ,identifier)))
+  (destructuring-bind (&key (type 'text) parameters) body
+    `(defclass ,name (property)
+       ((value :type ,type)
+        ,@(loop for parameter in parameters
+                collect (if (listp parameter) parameter (list parameter))))
+       (:metaclass property-class)
+       (:identifier ,identifier))))
 
 (defclass property-slot (c2mop:standard-slot-definition)
   ((constraint :initarg :constraint :reader constraint)

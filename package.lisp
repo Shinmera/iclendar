@@ -15,6 +15,7 @@
    #:value
    #:parameters
    #:identifier
+   #:x-parameters
    #:define-property
    #:component
    #:x-properties
@@ -184,6 +185,7 @@
    #:address-list
    #:second-list
    #:minute-list
+   #:hour-list
    #:week-day-list
    #:month-day-list
    #:year-day-list
@@ -193,13 +195,53 @@
    #:address
    #:week-day
    #:week-day-num
+   #:week-day-num-week
+   #:week-day-num-week-day
    #:date
+   #:date-year
+   #:date-month
+   #:date-date
    #:date-time
+   #:date-time-month
+   #:date-time-year
+   #:date-time-date
+   #:date-time-hour
+   #:date-time-minute
+   #:date-time-second
+   #:date-time-utc-p
    #:time-span
+   #:time-span-week
+   #:time-span-hour
+   #:time-span-minute
+   #:time-span-second
+   #:time-span-day
+   #:time-span-inc-p
    #:period
+   #:period-start
+   #:period-limit
    #:recurrence
+   #:recurrence-frequency
+   #:recurrence-end-date
+   #:recurrence-count
+   #:recurrence-interval
+   #:recurrence-by-seconds
+   #:recurrence-by-minutes
+   #:recurrence-by-hours
+   #:recurrence-by-days
+   #:recurrence-by-month-days
+   #:recurrence-by-year-days
+   #:recurrence-by-weeks
+   #:recurrence-by-months
+   #:recurrence-by-set-pos
+   #:recurrence-week-start
    #:uri
    #:utc-offset
+   #:utc-offset-hour
+   #:utc-offset-minute
+   #:utc-offset-second
+   #:utc-offset-inc-p
    #:geo
+   #:geo-lat
+   #:geo-lng
    #:text
    #:language))
