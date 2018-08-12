@@ -24,24 +24,29 @@
                        (c2mop:finalize-inheritance super))
                      (return (slot-value class 'identifier)))))))
 
-
 (defclass parameter-slot (c2mop:standard-slot-definition serializable-class)
   ())
 
 (defclass direct-parameter-slot (c2mop:standard-direct-slot-definition parameter-slot)
   ())
 
+(defmethod initialize-instance :after ((slot direct-parameter-slot) &key)
+  ;; Push default initarg and accessor.
+  (let ((name (c2mop:slot-definition-name slot)))
+    (unless (c2mop:slot-definition-initargs slot)
+      (setf (c2mop:slot-definition-initargs slot) (list (intern (string name) :keyword))))
+    (unless (or (c2mop:slot-definition-readers slot)
+                (c2mop:slot-definition-writers slot))
+      (setf (c2mop:slot-definition-readers slot) (list name))
+      (setf (c2mop:slot-definition-writers slot) (list `(setf ,name))))))
+
 (defmacro define-parameter ((name identifier) &body body)
-  (destructuring-bind (&key (type 'text) (initargs (list (intern (string name) :keyword)))
-                            (readers (list name)) (writers (list `(setf ,name))))
+  (destructuring-bind (&key (type 'text))
       body
     `(defclass ,name (direct-parameter-slot)
        ()
        (:default-initargs
         :type ',type
-        :initargs ',initargs
-        :readers ',readers
-        :writers ',writers
         :identifier ,identifier))))
 
 (defclass effective-parameter-slot (c2mop:standard-effective-slot-definition parameter-slot)
