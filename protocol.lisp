@@ -6,35 +6,6 @@
 
 (in-package #:org.shirakumo.iclendar)
 
-(defmacro define-print-object (class identity format-string &rest args)
-  (let ((stream (gensym "STREAM")))
-    `(defmethod print-object ((,class ,class) ,stream)
-       (print-unreadable-object (,class ,stream :type T :identity ,identity)
-         (symbol-macrolet ,(loop for arg in args
-                                 when (symbolp arg)
-                                 collect `(,arg (if (slot-boundp ,class ',arg)
-                                                    (,arg ,class)
-                                                    '<unbound>)))
-           (let ((*print-property-value-only* T))
-             (format ,stream ,format-string ,@args)))))))
-
-(defun ensure-finalized (class)
-  (let ((class (etypecase class
-                 (class class)
-                 (symbol (find-class class)))))
-    (unless (c2mop:class-finalized-p class)
-      (c2mop:finalize-inheritance class))
-    class))
-
-(defun find-direct-slot (name class)
-  (find name (c2mop:class-direct-slots class) :key #'c2mop:slot-definition-name))
-
-(defun find-superclass-slot (name class)
-  (loop for super in (c2mop:class-direct-superclasses class)
-        for found = (find name (c2mop:class-slots (ensure-finalized super))
-                          :key #'c2mop:slot-definition-name)
-        when found return found))
-
 (defclass serializable-class (c2mop:metaobject)
   ((identifier :reader identifier)))
 

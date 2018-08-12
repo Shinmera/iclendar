@@ -6,23 +6,6 @@
 
 (in-package #:org.shirakumo.iclendar)
 
-(defun c-day () (nth-value 6 (decode-universal-time (get-universal-time) 0)))
-(defun c-year () (nth-value 5 (decode-universal-time (get-universal-time) 0)))
-(defun c-month () (nth-value 4 (decode-universal-time (get-universal-time) 0)))
-(defun c-date () (nth-value 3 (decode-universal-time (get-universal-time) 0)))
-(defun c-hour () (nth-value 2 (decode-universal-time (get-universal-time) 0)))
-(defun c-minute () (nth-value 1 (decode-universal-time (get-universal-time) 0)))
-(defun c-second () (nth-value 0 (decode-universal-time (get-universal-time) 0)))
-
-(defmacro define-list-type (name inner)
-  (let ((predicate (intern (let ((*print-case* (readtable-case *readtable*)))
-                             (format NIL "~a-~a" name 'p)))))
-    `(progn (defun ,predicate (list)
-              (loop for entry in list
-                    always (typep entry ',inner)))
-            (deftype ,name ()
-              '(and list (satisfies ,predicate))))))
-
 (define-list-type address-list address)
 (define-list-type second-list (integer 0 60))
 (define-list-type minute-list (integer 0 59))

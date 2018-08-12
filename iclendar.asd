@@ -13,6 +13,7 @@
   :homepage "https://github.com/Shinmera/iclendar"
   :serial T
   :components ((:file "package")
+               (:file "toolkit")
                (:file "stream")
                (:file "protocol")
                (:file "standard-types")
