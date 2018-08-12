@@ -2680,8 +2680,14 @@ Can be one of :SUNDAY :MONDAY :TUESDAY :WEDNESDAY :THURSDAY :FRIDAY :SATURDAY")
   (type week-day-num
     "Type for a week-day recurrence constraint.
 
+See MAKE-WEEK-DAY-NUM
 See WEEK-DAY-NUM-WEEK
 See WEEK-DAY-NUM-WEEK-DAY")
+
+  (function make-week-day-num
+    "Create a fresh week-day-num instance.
+
+See WEEK-DAY-NUM")
 
   (function week-day-num-week
     "The number of weeks to recur by.
@@ -2701,14 +2707,21 @@ See WEEK-DAY")
   (type date
     "Describes a specific day on the calendar.
 
+See MAKE-DATE
 See DATE-YEAR
 See DATE-MONTH
 See DATE-DATE")
+
+  (function make-date
+    "Create a fresh date instance.
+
+See DATE")
 
   (function date-year
     "The year of the date.
 
 Must be a positive integer.
+Defaults to the current UTC year.
 
 See DATE")
 
@@ -2716,6 +2729,7 @@ See DATE")
     "The month of the date.
 
 Must be an integer in [1,12].
+Defaults to the current UTC month.
 
 See DATE")
 
@@ -2723,6 +2737,7 @@ See DATE")
     "The day of the date.
 
 Must be an integer in [1,31].
+Defaults to the current UTC date.
 
 See DATE")
 
@@ -2825,6 +2840,7 @@ From RFC5545:
   Implementations that do not support leap seconds SHOULD interpret
   the second 60 as equivalent to the second 59.
 
+See MAKE-DATE-TIME
 See DATE-TIME-YEAR
 See DATE-TIME-MONTH
 See DATE-TIME-DATE
@@ -2833,10 +2849,16 @@ See DATE-TIME-MINUTE
 See DATE-TIME-SECOND
 See DATE-TIME-UTC-P")
 
+  (function make-date-time
+    "Create a fresh date-time instance.
+
+See DATE-TIME")
+
   (function date-time-month
     "The month of the date.
 
 Must be an integer in [1,12].
+Defaults to the current UTC month.
 
 See DATE-TIME")
 
@@ -2844,6 +2866,7 @@ See DATE-TIME")
     "The year of the date.
 
 Must be a positive integer.
+Defaults to the current UTC year.
 
 See DATE-TIME")
 
@@ -2851,6 +2874,7 @@ See DATE-TIME")
     "The day of the date.
 
 Must be an integer in [1,31].
+Defaults to the current UTC date.
 
 See DATE-TIME")
 
@@ -2858,6 +2882,7 @@ See DATE-TIME")
     "The hour of the time.
 
 Must be an integer in [0,23].
+Defaults to the current UTC hour.
 
 See DATE-TIME")
 
@@ -2865,6 +2890,7 @@ See DATE-TIME")
     "The minute of the time.
 
 Must be an integer in [0,59].
+Defaults to the current UTC minute.
 
 See DATE-TIME")
 
@@ -2872,6 +2898,7 @@ See DATE-TIME")
     "The second of the time.
 
 Must be an integer in [0,60].
+Defaults to the current UTC second.
 
 60 is allowed to account for leap seconds.
 
@@ -2881,6 +2908,7 @@ See DATE-TIME")
     "Whether the time is in UTC.
 
 Must be a boolean.
+Defaults to T.
 
 See DATE-TIME")
 
@@ -2914,12 +2942,18 @@ From RFC5545:
   No additional content value encoding (i.e., BACKSLASH character
   encoding, see Section 3.3.11) are defined for this value type.
 
+See MAKE-TIME-SPAN
 See TIME-SPAN-WEEK
 See TIME-SPAN-HOUR
 See TIME-SPAN-MINUTE
 See TIME-SPAN-SECOND
 See TIME-SPAN-DAY
 See TIME-SPAN-INC-P")
+
+  (function make-time-span
+    "Create a fresh time-span instance.
+
+See TIME-SPAN")
 
   (function time-span-week
     "The number of weeks to span.
@@ -2981,8 +3015,14 @@ From RFC5545:
   the period, followed by a SOLIDUS character, followed by the
   [ISO.8601.2004] basic format for DURATION of the period.
 
+See MAKE-PERIOD
 See PERIOD-START
 See PERIOD-LIMIT")
+
+  (function make-period
+    "Create a fresh period instance.
+
+See PERIOD")
 
   (function period-start
     "The start date of the period.
@@ -3252,6 +3292,7 @@ From RFC5545:
   No additional content value encoding (i.e., BACKSLASH character
   encoding, see Section 3.3.11) is defined for this value type.
 
+See MAKE-RECURRENCE
 See RECURRENCE-FREQUENCY
 See RECURRENCE-END-DATE
 See RECURRENCE-COUNT
@@ -3266,6 +3307,11 @@ See RECURRENCE-BY-WEEKS
 See RECURRENCE-BY-MONTHS
 See RECURRENCE-BY-SET-POS
 See RECURRENCE-WEEK-START")
+
+  (function make-recurrence
+    "Create a fresh recurrence instance.
+
+See RECURRENCE")
 
   (function recurrence-frequency
     "The frequency by which the recurrence happens.
@@ -3409,10 +3455,16 @@ From RFC5545:
   No additional content value encoding (i.e., BACKSLASH character
   encoding, see Section 3.3.11) is defined for this value type.
 
+See MAKE-UTC-OFFSET
 See UTC-OFFSET-HOUR
 See UTC-OFFSET-MINUTE
 See UTC-OFFSET-SECOND
 See UTC-OFFSET-INC-P")
+
+  (function make-utc-offset
+    "Create a fresh utc-offset instance.
+
+See UTC-OFFSET")
 
   (function utc-offset-hour
     "The number of hours [0,23] offset from UTC.
@@ -3437,8 +3489,14 @@ See UTC-OFFSET")
   (type geo
     "Representation for a geographic location.
 
+See MAKE-GEO
 See GEO-LAT
 See GEO-LNG")
+
+  (function make-geo
+    "Create a fresh geo instance.
+
+See GEO")
 
   (function geo-lat
     "Accesses the latitude of the location as a float.

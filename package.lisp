@@ -195,13 +195,16 @@
    #:address
    #:week-day
    #:week-day-num
+   #:make-week-day-num
    #:week-day-num-week
    #:week-day-num-week-day
    #:date
+   #:make-date
    #:date-year
    #:date-month
    #:date-date
    #:date-time
+   #:make-date-time
    #:date-time-month
    #:date-time-year
    #:date-time-date
@@ -210,6 +213,7 @@
    #:date-time-second
    #:date-time-utc-p
    #:time-span
+   #:make-time-span
    #:time-span-week
    #:time-span-hour
    #:time-span-minute
@@ -217,9 +221,11 @@
    #:time-span-day
    #:time-span-inc-p
    #:period
+   #:make-period
    #:period-start
    #:period-limit
    #:recurrence
+   #:make-recurrence
    #:recurrence-frequency
    #:recurrence-end-date
    #:recurrence-count
@@ -236,11 +242,13 @@
    #:recurrence-week-start
    #:uri
    #:utc-offset
+   #:make-utc-offset
    #:utc-offset-hour
    #:utc-offset-minute
    #:utc-offset-second
    #:utc-offset-inc-p
    #:geo
+   #:make-geo
    #:geo-lat
    #:geo-lng
    #:text
