@@ -1489,20 +1489,80 @@ See TRIGGER"))
 ;; standard-properties.lisp
 (docs:define-docs
   (type action
-    "
+    "Describes the action that should be taken when the alarm is signalled.
+
+From RFC5545:
+  Each VALARM calendar component has a particular type
+  of action with which it is associated.  This property specifies
+  the type of action.  Applications MUST ignore alarms with x-name
+  and iana-token values they don't recognize.
 
 See PROPERTY")
 
   (type attachment
-    "
+    "This property describes a file attachment to the component.
+
+Must be an ATTACHMENT-VALUE
+
+From RFC5545:
+  This property is used in VEVENT, VTODO, and
+  VJOURNAL calendar components to associate a resource (e.g.,
+  document) with the calendar component.  This property is used in
+  VALARM calendar components to specify an audio sound resource or
+  an email message attachment.  This property can be specified as a
+  URI pointing to a resource or as inline binary encoded content.
+
+  When this property is specified as inline binary encoded content,
+  calendar applications MAY attempt to guess the media type of the
+  resource via inspection of its content if and only if the media
+  type of the resource is not given by the FMTTYPE parameter.  If
+  the media type remains unknown, calendar applications SHOULD treat
+  it as type \"application/octet-stream\".
 
 See PROPERTY
 See ENCODING
 See VALUE-TYPE
-See FORMAT-TYPE")
+See FORMAT-TYPE
+See ATTACHMENT-VALUE")
 
   (type attendee
-    "
+    "This property describes a person who attends the calendar's event.
+
+Must be an ADDRESS.
+
+From RFC5545:
+  This property MUST only be specified within calendar
+  components to specify participants, non-participants, and the
+  chair of a group-scheduled calendar entity.  The property is
+  specified within an EMAIL category of the VALARM calendar
+  component to specify an email address that is to receive the email
+  type of iCalendar alarm.
+
+  The property parameter CN is for the common or displayable name
+  associated with the calendar address; ROLE, for the intended
+  role that the attendee will have in the calendar component;
+  PARTSTAT, for the status of the attendee's participation;
+  RSVP, for indicating whether the favor of a reply is requested;
+  CUTYPE, to indicate the type of calendar user; MEMBER, to
+  indicate the groups that the attendee belongs to; DELEGATED-TO,
+  to indicate the calendar users that the original request was
+  delegated to; and DELEGATED-FROM, to indicate whom the request
+  was delegated from; SENT-BY, to indicate whom is acting on
+  behalf of the ATTENDEE; and DIR, to indicate the URI that
+  points to the directory information corresponding to the attendee.
+  These property parameters can be specified on an ATTENDEE
+  property in either a VEVENT, VTODO, or VJOURNAL calendar
+  component.  They MUST NOT be specified in an ATTENDEE property
+  in a VFREEBUSY or VALARM calendar component.  If the
+
+  LANGUAGE property parameter is specified, the identified
+  language applies to the CN parameter.
+
+  A recipient delegated a request MUST inherit the RSVP and ROLE
+  values from the attendee that delegated the request to them.
+
+  Multiple attendees can be specified by including multiple
+  ATTENDEE properties within the calendar component.
 
 See PROPERTY
 See LANGUAGE
@@ -1515,258 +1575,1055 @@ See DELEGATEE
 See DELEGATOR
 See SENT-BY
 See COMMON-NAME
-See DIRECTORY-ENTRY")
+See DIRECTORY-ENTRY
+See ADDRESS")
 
   (type category
-    "
+    "This property describes a category of the component.
+
+Must be a TEXT.
+
+From RFC5545:
+  This property is used to specify categories or subtypes
+  of the calendar component.  The categories are useful in searching
+  for a calendar component of a particular type and category.
+  Within the VEVENT, VTODO, or VJOURNAL calendar components,
+  more than one category can be specified as a COMMA-separated list
+  of categories.
 
 See PROPERTY
-See LANGUAGE")
+See LANGUAGE
+See TEXT")
 
   (type classification
-    "
+    "This property describes the classification/confidentiality of an entry.
+
+Must be a string or one of :PUBLIC :PRIVATE :CONFIDENTIAL.
+
+From RFC5545:
+  An access classification is only one component of the
+  general security system within a calendar application.  It
+  provides a method of capturing the scope of the access the
+  calendar owner intends for information within an individual
+  calendar entry.  The access classification of an individual
+  iCalendar component is useful when measured along with the other
+  security components of a calendar system (e.g., calendar user
+  authentication, authorization, access rights, access role, etc.).
+  Hence, the semantics of the individual access classifications
+  cannot be completely defined by this memo alone.  Additionally,
+  due to the blind nature of most exchange processes using this
+  memo, these access classifications cannot serve as an enforcement
+  statement for a system receiving an iCalendar object.  Rather,
+  they provide a method for capturing the intention of the calendar
+  owner for the access to the calendar component.  If not specified
+  in a component that allows this property, the default value is
+  PUBLIC.  Applications MUST treat x-name and iana-token values they
+  don't recognize the same way as they would the PRIVATE value.
 
 See PROPERTY")
 
   (type comment
-    "
+    "This property is used to specify a comment to the calendar user.
+
+Must be a TEXT.
 
 See PROPERTY
 See ALTERNATE-REPRESENTATION
-See LANGUAGE")
+See LANGUAGE
+See TEXT")
 
   (type completed
-    "
+    "This property defines the date and time that a to-do was actually completed.
 
-See PROPERTY")
+Must be a DATE-TIME.
+
+See PROPERTY
+See DATE-TIME")
 
   (type completeness
-    "
+    "This property describes the percentage of completeness of the component.
+
+Must be an integer in [0,100].
+
+From RFC5545:
+  The property value is a positive integer between 0 and
+  100.  A value of 0 indicates the to-do has not yet been started.
+  A value of 100 indicates that the to-do has been completed.
+  Integer values in between indicate the percent partially complete.
+
+  When a to-do is assigned to multiple individuals, the property
+  value indicates the percent complete for that portion of the to-do
+  assigned to the assignee or delegatee.  For example, if a to-do is
+  assigned to both individuals A and B.  A reply from A with a
+  percent complete of 70 indicates that A has completed 70% of
+  the to-do assigned to them.  A reply from B with a percent
+  complete of 50 indicates B has completed 50% of the to-do
+  assigned to them.
 
 See PROPERTY")
 
   (type contact
-    "
+    "This property describes a representative contact person.
+
+Must be a TEXT.
+
+From RFC5545:
+  The property value consists of textual contact
+  information.  An alternative representation for the property value
+  can also be specified that refers to a URI pointing to an
+  alternate form, such as a vCard [RFC2426], for the contact
+  information.
 
 See PROPERTY
 See ALTERNATE-REPRESENTATION
-See LANGUAGE")
+See LANGUAGE
+See TEXT")
 
   (type created
-    "
+    "This property describes the creation time of the component.
 
-See PROPERTY")
+Must be a DATE-TIME.
+
+From RFC5545:
+  This property specifies the date and time that the
+  calendar information was created by the calendar user agent in the
+  calendar store.
+
+See PROPERTY
+See DATE-TIME")
 
   (type description
-    "
+    "This property describes a human-readable description of the component.
+
+Must be a TEXT.
+
+From RFC5545:
+  This property is used in the VEVENT and VTODO to
+  capture lengthy textual descriptions associated with the activity.
+
+  This property is used in the VJOURNAL calendar component to
+  capture one or more textual journal entries.
+
+  This property is used in the VALARM calendar component to
+  capture the display text for a DISPLAY category of alarm, and to
+  capture the body text for an EMAIL category of alarm.
+
 
 See PROPERTY
 See ALTERNATE-REPRESENTATION
-See LANGUAGE")
+See LANGUAGE
+See TEXT")
 
   (type due
-    "
+    "This property describes a due date for the component.
+
+Must be a DATE-TIME or a DATE.
+
+From RFC5545:
+  This property defines the date and time before which a
+  to-do is expected to be completed.  For cases where this property
+  is specified in a VTODO calendar component that also specifies a
+  DTSTART property, the value type of this property MUST be the
+  same as the DTSTART property, and the value of this property
+  MUST be later in time than the value of the DTSTART property.
+  Furthermore, this property MUST be specified as a date with local
+  time if and only if the DTSTART property is also specified as a
+  date with local time.
 
 See PROPERTY
 See VALUE-TYPE
-See TIME-ZONE-IDENTIFIER")
+See TIME-ZONE-IDENTIFIER
+See DATE
+See DATE-TIME")
 
   (type duration
-    "
+    "This property describes a runtime duration of the component.
 
-See PROPERTY")
+Must be a TIME-SPAN.
+
+From RFC5545:
+  In a VEVENT calendar component the property may be
+  used to specify a duration of the event, instead of an explicit
+  end DATE-TIME.  In a VTODO calendar component the property may
+  be used to specify a duration for the to-do, instead of an
+  explicit due DATE-TIME.  In a VALARM calendar component the
+  property may be used to specify the delay period prior to
+  repeating an alarm.  When the DURATION property relates to a
+  DTSTART property that is specified as a DATE value, then the
+  DURATION property MUST be specified as a dur-day or dur-week
+  value.
+
+See PROPERTY
+See TIME-SPAN")
 
   (type end
-    "
+    "This property describes an end date for the component.
+
+Must be a DATE-TIME or a DATE.
+
+From RFC5545:
+  Within the VEVENT calendar component, this property
+  defines the date and time by which the event ends.  The value type
+  of this property MUST be the same as the DTSTART property, and
+  its value MUST be later in time than the value of the DTSTART
+  property.  Furthermore, this property MUST be specified as a date
+  with local time if and only if the DTSTART property is also
+  specified as a date with local time.
+
+  Within the VFREEBUSY calendar component, this property defines
+  the end date and time for the free or busy time information.  The
+  time MUST be specified in the UTC time format.  The value MUST be
+  later in time than the value of the DTSTART property.
 
 See PROPERTY
 See VALUE-TYPE
-See TIME-ZONE-IDENTIFIER")
+See TIME-ZONE-IDENTIFIER
+See DATE-TIME
+See DATE")
 
   (type exception-date
-    "
+    "This property describes an exceptional date on which the component does not recur.
+
+Must be a DATE-TIME or a DATE.
+
+From RFC5545:
+   The exception dates, if specified, are used in
+  computing the recurrence set.  The recurrence set is the complete
+  set of recurrence instances for a calendar component.  The
+  recurrence set is generated by considering the initial DTSTART
+  property along with the RRULE, RDATE, and EXDATE properties
+  contained within the recurring component.  The DTSTART property
+  defines the first instance in the recurrence set.  The DTSTART
+  property value SHOULD match the pattern of the recurrence rule, if
+  specified.  The recurrence set generated with a DTSTART property
+  value that doesn't match the pattern of the rule is undefined.
+  The final recurrence set is generated by gathering all of the
+  start DATE-TIME values generated by any of the specified RRULE
+  and RDATE properties, and then excluding any start DATE-TIME
+  values specified by EXDATE properties.  This implies that start
+  DATE-TIME values specified by EXDATE properties take precedence
+  over those specified by inclusion properties (i.e., RDATE and
+  RRULE).  When duplicate instances are generated by the RRULE
+  and RDATE properties, only one recurrence is considered.
+  Duplicate instances are ignored.
+
+  The EXDATE property can be used to exclude the value specified
+  in DTSTART.  However, in such cases, the original DTSTART date
+  MUST still be maintained by the calendaring and scheduling system
+  because the original DTSTART value has inherent usage
+  dependencies by other properties such as the RECURRENCE-ID.
 
 See PROPERTY
 See VALUE-TYPE
-See TIME-ZONE-IDENTIFIER")
+See TIME-ZONE-IDENTIFIER
+See DATE-TIME
+See DATE")
 
   (type free/busy-period
-    "
+    "This property describes a free or busy time period.
+
+Must be a PERIOD.
+
+From RFC5545:
+  These time periods can be specified as either a start
+  and end DATE-TIME or a start DATE-TIME and DURATION.  The date and
+  time MUST be a UTC time format.
+
+  FREEBUSY properties within the VFREEBUSY calendar component
+  SHOULD be sorted in ascending order, based on start time and then
+  end time, with the earliest periods first.
+
+  The FREEBUSY property can specify more than one value, separated
+  by the COMMA character.  In such cases, the FREEBUSY property
+  values MUST all be of the same FBTYPE property parameter type
+  (e.g., all values of a particular FBTYPE listed together in a
+  single property).
 
 See PROPERTY
-See FREE/BUSY-TYPE")
+See FREE/BUSY-TYPE
+See PERIOD")
 
   (type geographic-location
-    "
+    "This property describes a geographic location where the component takes place.
 
-See PROPERTY")
+Must be a GEO.
+
+From RFC5545:
+  This property value specifies latitude and longitude,
+  in that order (i.e., LAT LON ordering).  The longitude
+  represents the location east or west of the prime meridian as a
+  positive or negative real number, respectively.  The longitude and
+  latitude values MAY be specified up to six decimal places, which
+  will allow for accuracy to within one meter of geographical
+  position.  Receiving applications MUST accept values of this
+  precision and MAY truncate values of greater precision.
+
+  Values for latitude and longitude shall be expressed as decimal
+  fractions of degrees.  Whole degrees of latitude shall be
+  represented by a two-digit decimal number ranging from 0 through
+  90.  Whole degrees of longitude shall be represented by a decimal
+  number ranging from 0 through 180.  When a decimal fraction of a
+  degree is specified, it shall be separated from the whole number
+  of degrees by a decimal point.
+
+  Latitudes north of the equator shall be specified by a plus sign
+  (+), or by the absence of a minus sign (-), preceding the digits
+  designating degrees.  Latitudes south of the Equator shall be
+  designated by a minus sign (-) preceding the digits designating
+  degrees.  A point on the Equator shall be assigned to the Northern
+  Hemisphere.
+
+  Longitudes east of the prime meridian shall be specified by a plus
+  sign (+), or by the absence of a minus sign (-), preceding the
+  digits designating degrees.  Longitudes west of the meridian shall
+  be designated by minus sign (-) preceding the digits designating
+  degrees.  A point on the prime meridian shall be assigned to the
+  Eastern Hemisphere.  A point on the 180th meridian shall be
+  assigned to the Western Hemisphere.  One exception to this last
+  convention is permitted.  For the special condition of describing
+  a band of latitude around the earth, the East Bounding Coordinate
+  data element shall be assigned the value +180 (180) degrees.
+
+  Any spatial address with a latitude of +90 (90) or -90 degrees
+  will specify the position at the North or South Pole,
+  respectively.  The component for longitude may have any legal
+  value.
+
+  With the exception of the special condition described above, this
+  form is specified in [ANSI INCITS 61-1986].
+
+  The simple formula for converting degrees-minutes-seconds into
+  decimal degrees is:
+
+  decimal = degrees + minutes/60 + seconds/3600.
+
+See PROPERTY
+See GEO")
 
   (type last-modification
-    "
+    "This property specifies the date and time that the information associated with the calendar component was last revised in the calendar store.
 
-See PROPERTY")
+Must be a DATE-TIME
+
+See PROPERTY
+See DATE-TIME")
 
   (type location
-    "
+    "This property describes a physical location where the component takes place.
+
+Must be a TEXT.
+
+From RFC5545:
+  Specific venues such as conference or meeting rooms may
+  be explicitly specified using this property.  An alternate
+  representation may be specified that is a URI that points to
+  directory information with more structured specification of the
+  location.  For example, the alternate representation may specify
+  either an LDAP URL [RFC4516] pointing to an LDAP server entry or a
+  CID URL [RFC2392] pointing to a MIME body part containing a
+  Virtual-Information Card (vCard) [RFC2426] for the location.
 
 See PROPERTY
 See ALTERNATE-REPRESENTATION
-See LANGUAGE")
+See LANGUAGE
+See TEXT")
 
   (type offset-from
-    "
+    "This property describes where the time zone is offset from.
 
-See PROPERTY")
+Must be an UTC-OFFSET.
+
+From RFC5545:
+  This property specifies the offset that is in use prior
+  to this time observance.  It is used to calculate the absolute
+  time at which the transition to a given observance takes place.
+  This property MUST only be specified in a VTIMEZONE calendar
+  component.  A VTIMEZONE calendar component MUST include this
+  property.  The property value is a signed numeric indicating the
+  number of hours and possibly minutes from UTC.  Positive numbers
+  represent time zones east of the prime meridian, or ahead of UTC.
+  Negative numbers represent time zones west of the prime meridian,
+  or behind UTC.
+
+See PROPERTY
+See UTC-OFFSET")
 
   (type offset-to
-    "
+    "This property describes where the time zone is offset to.
 
-See PROPERTY")
+From RFC5545:
+  This property specifies the offset that is in use in
+  this time zone observance.  It is used to calculate the absolute
+  time for the new observance.  The property value is a signed
+  numeric indicating the number of hours and possibly minutes from
+  UTC.  Positive numbers represent time zones east of the prime
+  meridian, or ahead of UTC.  Negative numbers represent time zones
+  west of the prime meridian, or behind UTC.
+
+See PROPERTY
+See UTC-OFFSET")
 
   (type organizer
-    "
+    "This property describes the organizer of the component.
+
+Must be an ADDRESS.
+
+From RFC5545:
+  This property is specified within the VEVENT,
+  VTODO, and VJOURNAL calendar components to specify the
+  organizer of a group-scheduled calendar entity.  The property is
+  specified within the VFREEBUSY calendar component to specify the
+  calendar user requesting the free or busy time.  When publishing a
+  VFREEBUSY calendar component, the property is used to specify
+  the calendar that the published busy time came from.
+
+  The property has the property parameters CN, for specifying the
+  common or display name associated with the Organizer, DIR, for
+  specifying a pointer to the directory information associated with
+  the Organizer, SENT-BY, for specifying another calendar user
+  that is acting on behalf of the Organizer.  The non-standard
+  parameters may also be specified on this property.  If the
+  LANGUAGE property parameter is specified, the identified
+  language applies to the CN parameter value.
 
 See PROPERTY
 See LANGUAGE
 See COMMON-NAME
 See DIRECTORY-ENTRY
-See SENT-BY")
+See SENT-BY
+See ADDRESS")
 
   (type priority
-    "
+    "This property describes the priority of the component.
+
+Must be an integer in [0,9].
+
+From RFC5545:
+  This priority is specified as an integer in the range 0
+  to 9.  A value of 0 specifies an undefined priority.  A value of 1
+  is the highest priority.  A value of 2 is the second highest
+  priority.  Subsequent numbers specify a decreasing ordinal
+  priority.  A value of 9 is the lowest priority.
+
+  A CUA with a three-level priority scheme of HIGH, MEDIUM, and
+  LOW is mapped into this property such that a property value in
+  the range of 1 to 4 specifies HIGH priority.  A value of 5 is
+  the normal or MEDIUM priority.  A value in the range of 6 to 9
+  is LOW priority.
+
+  A CUA with a priority schema of A1, A2, A3, B1, B2, ...,
+  C3 is mapped into this property such that a property value of 1
+  specifies A1, a property value of 2 specifies A2, a property
+  value of 3 specifies A3, and so forth up to a property value of
+  9 specifies C3.
+
+  Other integer values are reserved for future use.
+
+  Within a VEVENT calendar component, this property specifies a
+  priority for the event.  This property may be useful when more
+  than one event is scheduled for a given time period.
+
+  Within a VTODO calendar component, this property specified a
+  priority for the to-do.  This property is useful in prioritizing
+  multiple action items for a given time period.
 
 See PROPERTY")
 
   (type product
-    "
+    "This property defines the calendar's producer.
 
-See PROPERTY")
+Must be a TEXT.
+
+From RFC5545:
+  The vendor of the implementation SHOULD assure that
+  this is a globally unique identifier; using some technique such as
+  an FPI value, as defined in [ISO.9070.1991].
+
+  This property SHOULD NOT be used to alter the interpretation of an
+  iCalendar object beyond the semantics specified in this memo.  For
+  example, it is not to be used to further the understanding of non-
+  standard properties.
+
+See PROPERTY
+See TEXT")
 
   (type recurrence-id
-    "
+    "This property allows referencing a specific recurrence date.
+
+Must be a DATE-TIME or a DATE.
+
+From RFC5545:
+  The full range of calendar components specified by a
+  recurrence set is referenced by referring to just the UID
+  property value corresponding to the calendar component.  The
+  RECURRENCE-ID property allows the reference to an individual
+  instance within the recurrence set.
+
+  If the value of the DTSTART property is a DATE type value, then
+  the value MUST be the calendar date for the recurrence instance.
+
+  The DATE-TIME value is set to the time when the original
+  recurrence instance would occur; meaning that if the intent is to
+  change a Friday meeting to Thursday, the DATE-TIME is still set to
+  the original Friday meeting.
+
+  The RECURRENCE-ID property is used in conjunction with the UID
+  and SEQUENCE properties to identify a particular instance of a
+  recurring event, to-do, or journal.  For a given pair of UID and
+  SEQUENCE property values, the RECURRENCE-ID value for a
+  recurrence instance is fixed.
+
+  The RANGE parameter is used to specify the effective range of
+  recurrence instances from the instance specified by the
+  RECURRENCE-ID property value.  The value for the range parameter
+  can only be THISANDFUTURE to indicate a range defined by the
+  given recurrence instance and all subsequent instances.
+  Subsequent instances are determined by their RECURRENCE-ID value
+  and not their current scheduled start time.  Subsequent instances
+  defined in separate components are not impacted by the given
+  recurrence instance.  When the given recurrence instance is
+  rescheduled, all subsequent instances are also rescheduled by the
+  same time difference.  For instance, if the given recurrence
+  instance is rescheduled to start 2 hours later, then all
+  subsequent instances are also rescheduled 2 hours later.
+
+  Similarly, if the duration of the given recurrence instance is
+  modified, then all subsequence instances are also modified to have
+  this same duration.
+
+     Note: The RANGE parameter may not be appropriate to
+     reschedule specific subsequent instances of complex recurring
+     calendar component.  Assuming an unbounded recurring calendar
+     component scheduled to occur on Mondays and Wednesdays, the
+     RANGE parameter could not be used to reschedule only the
+     future Monday instances to occur on Tuesday instead.  In such
+     cases, the calendar application could simply truncate the
+     unbounded recurring calendar component (i.e., with the COUNT
+     or UNTIL rule parts), and create two new unbounded recurring
+     calendar components for the future instances.
 
 See PROPERTY
 See VALUE-TYPE
 See TIME-ZONE-IDENTIFIER
-See RECURRENCE-IDENTIFIER-RANGE")
+See RECURRENCE-IDENTIFIER-RANGE
+See DATE
+See DATE-TIME")
 
   (type recurrence-date
-    "
+    "This property describes a specific date on which the component recurs.
+
+Must be a DATE-TIME or DATE.
+
+From RFC5545:
+  This property can appear along with the RRULE
+  property to define an aggregate set of repeating occurrences.
+  When they both appear in a recurring component, the recurrence
+
+  instances are defined by the union of occurrences defined by both
+  the RDATE and RRULE.
+
+  The recurrence dates, if specified, are used in computing the
+  recurrence set.  The recurrence set is the complete set of
+  recurrence instances for a calendar component.  The recurrence set
+  is generated by considering the initial DTSTART property along
+  with the RRULE, RDATE, and EXDATE properties contained
+  within the recurring component.  The DTSTART property defines
+  the first instance in the recurrence set.  The DTSTART property
+  value SHOULD match the pattern of the recurrence rule, if
+  specified.  The recurrence set generated with a DTSTART property
+  value that doesn't match the pattern of the rule is undefined.
+  The final recurrence set is generated by gathering all of the
+  start DATE-TIME values generated by any of the specified RRULE
+  and RDATE properties, and then excluding any start DATE-TIME
+  values specified by EXDATE properties.  This implies that start
+  DATE-TIME values specified by EXDATE properties take precedence
+  over those specified by inclusion properties (i.e., RDATE and
+  RRULE).  Where duplicate instances are generated by the RRULE
+  and RDATE properties, only one recurrence is considered.
+  Duplicate instances are ignored.
 
 See PROPERTY
 See VALUE-TYPE
-See TIME-ZONE-IDENTIFIER")
+See TIME-ZONE-IDENTIFIER
+See DATE
+See DATE-TIME")
 
   (type recurrence-rule
-    "
+    "This property describes a generic rule by which the component recurs.
 
-See PROPERTY")
+Must be a RECURRENCE.
 
-  (type related
-    "
+From RFC5545:
+  The recurrence rule, if specified, is used in computing
+  the recurrence set.  The recurrence set is the complete set of
+  recurrence instances for a calendar component.  The recurrence set
+  is generated by considering the initial DTSTART property along
+  with the RRULE, RDATE, and EXDATE properties contained
+  within the recurring component.  The DTSTART property defines
+  the first instance in the recurrence set.  The DTSTART property
+  value SHOULD be synchronized with the recurrence rule, if
+  specified.  The recurrence set generated with a DTSTART property
+  value not synchronized with the recurrence rule is undefined.  The
+  final recurrence set is generated by gathering all of the start
+  DATE-TIME values generated by any of the specified RRULE and
+  RDATE properties, and then excluding any start DATE-TIME values
+  specified by EXDATE properties.  This implies that start DATE-
+  TIME values specified by EXDATE properties take precedence over
+  those specified by inclusion properties (i.e., RDATE and
+  RRULE).  Where duplicate instances are generated by the RRULE
+  and RDATE properties, only one recurrence is considered.
+  Duplicate instances are ignored.
+
+  The DTSTART property specified within the iCalendar object
+  defines the first instance of the recurrence.  In most cases, a
+  DTSTART property of DATE-TIME value type used with a recurrence
+  rule, should be specified as a date with local time and time zone
+  reference to make sure all the recurrence instances start at the
+  same local time regardless of time zone changes.
+
+  If the duration of the recurring component is specified with the
+  DTEND or DUE property, then the same exact duration will apply
+  to all the members of the generated recurrence set.  Else, if the
+  duration of the recurring component is specified with the
+  DURATION property, then the same nominal duration will apply to
+  all the members of the generated recurrence set and the exact
+  duration of each recurrence instance will depend on its specific
+  start time.  For example, recurrence instances of a nominal
+  duration of one day will have an exact duration of more or less
+  than 24 hours on a day where a time zone shift occurs.  The
+  duration of a specific recurrence may be modified in an exception
+  component or simply by using an RDATE property of PERIOD value
+  type.
 
 See PROPERTY
-See RELATIONSHIP-TYPE")
+See RECURRENCE")
+
+  (type related
+    "This property defines a related component.
+
+Must be a TEXT.
+
+From RFC5545:
+  The property value consists of the persistent, globally
+  unique identifier of another calendar component.  This value would
+  be represented in a calendar component by the UID property.
+
+  By default, the property value points to another calendar
+  component that has a PARENT relationship to the referencing
+  object.  The RELTYPE property parameter is used to either
+  explicitly state the default PARENT relationship type to the
+  referenced calendar component or to override the default PARENT
+  relationship type and specify either a CHILD or SIBLING
+  relationship.  The PARENT relationship indicates that the calendar
+  component is a subordinate of the referenced calendar component.
+  The CHILD relationship indicates that the calendar component is a
+  superior of the referenced calendar component.  The SIBLING
+  relationship indicates that the calendar component is a peer of
+  the referenced calendar component.
+
+  Changes to a calendar component referenced by this property can
+  have an implicit impact on the related calendar component.  For
+  example, if a group event changes its start or end date or time,
+  then the related, dependent events will need to have their start
+  and end dates changed in a corresponding way.  Similarly, if a
+  PARENT calendar component is cancelled or deleted, then there is
+  an implied impact to the related CHILD calendar components.  This
+  property is intended only to provide information on the
+  relationship of calendar components.  It is up to the target
+  calendar system to maintain any property implications of this
+  relationship.
+
+See PROPERTY
+See RELATIONSHIP-TYPE
+See TEXT")
 
   (type repeat
-    "
+    "This property defines the number of times the component's action is repeated.
+
+Must be a positive integer.
+
+From RFC5545:
+  This property defines the number of times an alarm
+  should be repeated after its initial trigger.  If the alarm
+  triggers more than once, then this property MUST be specified
+  along with the DURATION property.
 
 See PROPERTY")
 
   (type request-status
-    "
+    "This property describes the status of the component's requested action.
 
-See PROPERTY")
+Must be a TEXT.
+
+See PROPERTY
+See TEXT")
 
   (type resource
-    "
+    "This property defines the equipment or resources anticipated for an activity specified by a calendar component.
+
+Must be a TEXT.
 
 See PROPERTY
 See ALTERNATE-REPRESENTATION
-See LANGUAGE")
+See LANGUAGE
+See TEXT")
 
   (type scale
-    "
+    "This property defines the calendar's scaling.
 
-See PROPERTY")
+Must be a TEXT.
+
+From RFC5545:
+  This memo is based on the Gregorian calendar scale.
+  The Gregorian calendar scale is assumed if this property is not
+  specified in the iCalendar object.  It is expected that other
+  calendar scales will be defined in other specifications or by
+  future versions of this memo.
+
+See PROPERTY
+See TEXT")
 
   (type sequence-number
-    "
+    "This property defines the sequence number of the component.
+
+Must be a positive integer.
+
+From RFC5545:
+  When a calendar component is created, its sequence
+  number is 0.  It is monotonically incremented by the \"Organizer's\"
+  CUA each time the \"Organizer\" makes a significant revision to the
+  calendar component.
+
+  The \"Organizer\" includes this property in an iCalendar object that
+  it sends to an \"Attendee\" to specify the current version of the
+  calendar component.
+
+  The \"Attendee\" includes this property in an iCalendar object that
+  it sends to the \"Organizer\" to specify the version of the calendar
+  component to which the \"Attendee\" is referring.
+
+  A change to the sequence number is not the mechanism that an
+  \"Organizer\" uses to request a response from the \"Attendees\".  The
+  \"RSVP\" parameter on the \"ATTENDEE\" property is used by the
+  \"Organizer\" to indicate that a response from the \"Attendees\" is
+  requested.
+
+  Recurrence instances of a recurring component MAY have different
+  sequence numbers.
 
 See PROPERTY")
 
   (type stamp
-    "
+    "This component describes the creation stamp of the component.
 
-See PROPERTY")
+Must be a DATE-TIME
+
+From RFC5545:
+  The value MUST be specified in the UTC time format.
+
+  This property is also useful to protocols such as [2447bis] that
+  have inherent latency issues with the delivery of content.  This
+  property will assist in the proper sequencing of messages
+  containing iCalendar objects.
+
+  In the case of an iCalendar object that specifies a METHOD
+  property, this property differs from the CREATED and LAST-
+  MODIFIED properties.  These two properties are used to specify
+  when the particular calendar data in the calendar store was
+  created and last modified.  This is different than when the
+  iCalendar object representation of the calendar service
+  information was created or last modified.
+
+  In the case of an iCalendar object that doesn't specify a METHOD
+  property, this property is equivalent to the LAST-MODIFIED
+  property.
+
+See PROPERTY
+See DATE-TIME")
 
   (type start
-    "
+    "This property describes the start time of the component.
 
-See PROPERTY
-See VALUE-TYPE
-See TIME-ZONE-IDENTIFIER")
+Must be a DATE-TIME or a DATE.
 
-  (type status
-    "
+From RFC5545:
+  Within the VEVENT calendar component, this property
+  defines the start date and time for the event.
 
-See PROPERTY")
+  Within the VFREEBUSY calendar component, this property defines
+  the start date and time for the free or busy time information.
+  The time MUST be specified in UTC time.
 
-  (type summary
-    "
-
-See PROPERTY
-See ALTERNATE-REPRESENTATION
-See LANGUAGE")
-
-  (type transparency
-    "
-
-See PROPERTY")
-
-  (type transport-method
-    "
-
-See PROPERTY")
-
-  (type trigger
-    "
+  Within the STANDARD and DAYLIGHT sub-components, this property
+  defines the effective start date and time for a time zone
+  specification.  This property is REQUIRED within each STANDARD
+  and DAYLIGHT sub-components included in VTIMEZONE calendar
+  components and MUST be specified as a date with local time without
+  the TZID property parameter.
 
 See PROPERTY
 See VALUE-TYPE
 See TIME-ZONE-IDENTIFIER
-See TRIGGER-ON")
+See DATE
+See DATE-TIME")
 
-  (type tzid
-    "
+  (type status
+    "This property defines the overall status or confirmation for the calendar component.
 
-See PROPERTY")
-
-  (type tzname
-    "
+Must be a TEXT.
 
 See PROPERTY
-See LANGUAGE")
+See TEXT")
+
+  (type summary
+    "This property defines a short summary or subject for the calendar component.
+
+Must be a TEXT.
+
+From RFC5545:
+  This property is used in the VEVENT, VTODO, and
+  VJOURNAL calendar components to capture a short, one-line
+  summary about the activity or journal entry.
+
+  This property is used in the VALARM calendar component to
+  capture the subject of an EMAIL category of alarm.
+
+See PROPERTY
+See ALTERNATE-REPRESENTATION
+See LANGUAGE
+See TEXT")
+
+  (type transparency
+    "This property describes whether the component takes up physical time.
+
+Must be a string or one of :OPAQUE :TRANSPARENT.
+
+From RFC5545:
+  Time Transparency is the characteristic of an event
+  that determines whether it appears to consume time on a calendar.
+  Events that consume actual time for the individual or resource
+  associated with the calendar SHOULD be recorded as OPAQUE,
+  allowing them to be detected by free/busy time searches.  Other
+  events, which do not take up the individual's (or resource's) time
+  SHOULD be recorded as TRANSPARENT, making them invisible to free/
+  busy time searches.
+
+See PROPERTY")
+
+  (type transport-method
+    "This property describes the transport method by which the calendar is sent.
+
+Must be a TEXT.
+
+From RFC5545:
+  When used in a MIME message entity, the value of this
+  property MUST be the same as the Content-Type method parameter
+  value.  If either the METHOD property or the Content-Type
+  method parameter is specified, then the other MUST also be
+  specified.
+
+  No methods are defined by this specification.  This is the subject
+  of other specifications, such as the iCalendar Transport-
+  independent Interoperability Protocol (iTIP) defined by [2446bis].
+
+  If this property is not present in the iCalendar object, then a
+  scheduling transaction MUST NOT be assumed.  In such cases, the
+  iCalendar object is merely being used to transport a snapshot of
+
+See PROPERTY
+See TEXT")
+
+  (type trigger
+    "This property describes the trigger for an alarm.
+
+Must be a TIME-SPAN or a DATE-TIME.
+
+From RFC5545:
+  This property defines when an alarm will trigger.  The
+  default value type is DURATION, specifying a relative time for the
+  trigger of the alarm.  The default duration is relative to the
+  start of an event or to-do with which the alarm is associated.
+  The duration can be explicitly set to trigger from either the end
+  or the start of the associated event or to-do with the RELATED
+  parameter.  A value of START will set the alarm to trigger off the
+  start of the associated event or to-do.  A value of END will set
+  the alarm to trigger off the end of the associated event or to-do.
+
+  Either a positive or negative duration may be specified for the
+  TRIGGER property.  An alarm with a positive duration is
+  triggered after the associated start or end of the event or to-do.
+  An alarm with a negative duration is triggered before the
+  associated start or end of the event or to-do.
+
+  The RELATED property parameter is not valid if the value type of
+  the property is set to DATE-TIME (i.e., for an absolute date and
+  time alarm trigger).  If a value type of DATE-TIME is specified,
+  then the property value MUST be specified in the UTC time format.
+  If an absolute trigger is specified on an alarm for a recurring
+  event or to-do, then the alarm will only trigger for the specified
+  absolute DATE-TIME, along with any specified repeating instances.
+
+  If the trigger is set relative to START, then the DTSTART
+  property MUST be present in the associated VEVENT or VTODO
+  calendar component.  If an alarm is specified for an event with
+  the trigger set relative to the END, then the DTEND property or
+  the DTSTART and DURATION  properties MUST be present in the
+  associated VEVENT calendar component.  If the alarm is specified
+  for a to-do with a trigger set relative to the END, then either
+  the DUE property or the DTSTART and DURATION  properties
+  MUST be present in the associated VTODO calendar component.
+
+  Alarms specified in an event or to-do that is defined in terms of
+  a DATE value type will be triggered relative to 00:00:00 of the
+  user's configured time zone on the specified date, or relative to
+  00:00:00 UTC on the specified date if no configured time zone can
+  be found for the user.  For example, if DTSTART is a DATE value
+  set to 19980205 then the duration trigger will be relative to
+  19980205T000000 America/New_York for a user configured with the
+  America/New_York time zone.
+
+See PROPERTY
+See VALUE-TYPE
+See TIME-ZONE-IDENTIFIER
+See TRIGGER-ON
+See TIME-SPAN
+See DATE-TIME")
+
+  (type tzid
+    "This property assigns a unique ID to the time zone to reference it by.
+
+Must be a TEXT.
+
+From RFC5545:
+  This is the label by which a time zone calendar
+  component is referenced by any iCalendar properties whose value
+  type is either DATE-TIME or TIME and not intended to specify a UTC
+  or a floating time.  The presence of the SOLIDUS character as a
+  prefix, indicates that this TZID represents an unique ID in a
+  globally defined time zone registry (when such registry is
+  defined).
+
+     Note: This document does not define a naming convention for
+     time zone identifiers.  Implementers may want to use the naming
+     conventions defined in existing time zone specifications such
+     as the public-domain TZ database [TZDB].  The specification of
+     globally unique time zone identifiers is not addressed by this
+     document and is left for future study.
+
+See PROPERTY
+See TEXT")
+
+  (type tzname
+    "This property describes a name for the time zone.
+
+Must be a TEXT.
+
+From RFC5545:
+  This property specifies a customary name that can be
+  used when displaying dates that occur during the observance
+  defined by the time zone sub-component.
+
+See PROPERTY
+See LANGUAGE
+See TEXT")
 
   (type tzurl
-    "
+    "This property describes a network location where the time zone is described.
 
-See PROPERTY")
+Must be a URI.
+
+From RFC5545:
+  This property provides a means for a VTIMEZONE
+  component to point to a network location that can be used to
+  retrieve an up-to-date version of itself.  This provides a hook to
+  handle changes government bodies impose upon time zone
+  definitions.  Retrieval of this resource results in an iCalendar
+  object containing a single VTIMEZONE component and a METHOD
+  property set to PUBLISH.
+
+See PROPERTY
+See URI")
 
   (type uid
-    "
+    "This property describes a globally unique identifier for the component.
 
-See PROPERTY")
+Must be a TEXT.
+
+From RFC5545:
+  The UID itself MUST be a globally unique identifier.
+  The generator of the identifier MUST guarantee that the identifier
+  is unique.  There are several algorithms that can be used to
+  accomplish this.  A good method to assure uniqueness is to put the
+  domain name or a domain literal IP address of the host on which
+  the identifier was created on the right-hand side of an @, and
+  on the left-hand side, put a combination of the current calendar
+  date and time of day (i.e., formatted in as a DATE-TIME value)
+  along with some other currently unique (perhaps sequential)
+  identifier available on the system (for example, a process id
+  number).  Using a DATE-TIME value on the left-hand side and a
+  domain name or domain literal on the right-hand side makes it
+  possible to guarantee uniqueness since no two hosts should be
+  using the same domain name or IP address at the same time.  Though
+  other algorithms will work, it is RECOMMENDED that the right-hand
+  side contain some domain identifier (either of the host itself or
+  otherwise) such that the generator of the message identifier can
+  guarantee the uniqueness of the left-hand side within the scope of
+  that domain.
+
+  This is the method for correlating scheduling messages with the
+  referenced VEVENT, VTODO, or VJOURNAL calendar component.
+
+  The full range of calendar components specified by a recurrence
+  set is referenced by referring to just the UID property value
+  corresponding to the calendar component.  The RECURRENCE-ID
+  property allows the reference to an individual instance within the
+  recurrence set.
+
+  This property is an important method for group-scheduling
+  applications to match requests with later replies, modifications,
+  or deletion requests.  Calendaring and scheduling applications
+  MUST generate this property in VEVENT, VTODO, and VJOURNAL
+  calendar components to assure interoperability with other group-
+  scheduling applications.  This identifier is created by the
+  calendar system that generates an iCalendar object.
+
+  Implementations MUST be able to receive and persist values of at
+  least 255 octets for this property, but they MUST NOT truncate
+  values in the middle of a UTF-8 multi-octet sequence.
+
+See PROPERTY
+See TEXT")
 
   (type url
-    "
+    "This property describes a URL where a rendered representation of the component resides.
 
-See PROPERTY")
+Must be a URI.
+
+From RFC5545:
+  This property may be used in a calendar component to
+  convey a location where a more dynamic rendition of the calendar
+  information associated with the calendar component can be found.
+  This memo does not attempt to standardize the form of the URI, nor
+  the format of the resource pointed to by the property value.  If
+  the URL property and Content-Location MIME header are both
+  specified, they MUST point to the same resource.
+
+See PROPERTY
+See URI")
 
   (type version
-    "
+    "This property defines the version of the iCalendar protocol.
 
-See PROPERTY"))
+Must be a TEXT.
+
+From RFC5545:
+  This property specifies the identifier corresponding to the
+  highest version number or the minimum and maximum range of the
+  iCalendar specification that is required in order to interpret the
+  iCalendar object.
+
+See PROPERTY
+See TEXT"))
 
 ;; standard-types.lisp
 (docs:define-docs
@@ -1801,7 +2658,7 @@ See WEEK-DAY-NUM")
   (type month-list
     "Type for a list with each item being an integer in [1,12].")
 
-  (type attachment
+  (type attachment-value
     "Type for attachment values.
 
 See URI
