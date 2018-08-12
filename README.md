@@ -70,12 +70,12 @@ Each of the following classes is a subclass of `serializable-class`, which merel
 ### Parameters
 Parameters are modelled as subclasses of a `parameter-direct-slot` class and thus describe custom slot types. These slot types are then used in `property` definitions, where they ensure that the parameter metadata has the correct type. You can define new parameters using `define-parameter`, or by simply individually adding them to the `x-parameters` slot on a `property` instance.
 
-## Properties
+### Properties
 Properties are modelled as classes that have a `value` slot, and a slot for each of the supported parameters. They also contain a slot called `x-parameters` with a table for custom, non-standard parameters. You can define new property types with `define-property`, which takes `:type` and `:parameters` extra options to define that behaviour.
 
 You can get an alist of all parameters of a property using `parameters`.
 
-## Components
+### Components
 A component contains a number of properties, potential sub-components, and a slot called `x-properties` for extraneous, non-standard properties. Each property is modelled as a slot that maintains relational constraints of the property within the component. You can define additional components with `define-component`. A slot in a component definition is turned into a property-slot if the initarg `:property` is present. If it is, the initarg's value must be the name of a `property` subclass. A property-slot also takes the `:constraint` initarg, which describes whether it is `:required`, `:optional`, or `:multiple` value. The constraint may also be one of `(not NAME)` or `(and NAME)` if the property may not be or must be set alongside another.
 
 You can get a list of all properties of a component using `properties`.
