@@ -169,7 +169,10 @@ See COMPONENTS")
 See COMPONENT-CONTAINER")
 
   (type calendar
-    "
+    "The calendar object is the top-level object in an iCalendar stream.
+
+It defines the base iCalendar metadata and contains other child components that make up the
+actual data. The version parameter defaults to \"2.0\", corresponding to RFC5545's version.
 
 See PRODUCT
 See SCALE
@@ -178,27 +181,33 @@ See VERSION
 See COMPONENT")
 
   (function product
-    "
+    "Accessor to the product ID of the calendar.
 
-See CALENDAR")
+The product ID is required and should identify the product that's emitting the calendar object.
+
+See CALENDAR
+See PRODUCT")
 
   (function scale
-    "
+    "Accessor to the scale of the calendar.
 
-See CALENDAR")
+See CALENDAR
+See SCALE")
 
   (function transport-method
-    "
+    "Accessor to the transport-method of the calendar.
 
-See CALENDAR")
+See CALENDAR
+See TRANSPORT-METHOD")
 
   (function version
-    "
+    "Accessor to the version of the calendar.
 
-See CALENDAR")
+See CALENDAR
+See VERSION")
 
   (type calendar-component
-    "
+    "This is a mixin class for common properties in subclasses.
 
 See ATTENDEES
 See COMMENTS
@@ -210,46 +219,55 @@ See URL
 See COMPONENT")
 
   (function attendees
-    "
+    "Accessor to the attendees list of the component.
 
+See ATTENDEE
 See CALENDAR-COMPONENT")
 
   (function comments
-    "
+    "Accessor to the comments list of the component.
 
+See COMMENT
 See CALENDAR-COMPONENT
 See TIME-ZONE-COMPONENT")
 
   (function request-status
-    "
+    "Accessor to the request status of the component.
 
+See REQUEST-STATUS
 See CALENDAR-COMPONENT")
 
   (function stamp
-    "
+    "Accessor to the creation stamp of the component.
 
+See STAMP
 See CALENDAR-COMPONENT")
 
   (function start
-    "
+    "Accessor to the start date of the component.
 
+See START
 See CALENDAR-COMPONENT
 See TIME-ZONE-COMPONENT")
 
   (function uid
-    "
+    "Accessor to the component's unique ID.
 
+See UID
+See TZID
 See CALENDAR-COMPONENT
 See TIME-ZONE")
 
   (function url
-    "
+    "Accessor to the component's URL.
 
+See URL
+See TZURL
 See CALENDAR-COMPONENT
 See TIME-ZONE")
 
   (type date-component
-    "
+    "This is a mixin class for common properties in subclasses.
 
 See ATTACHMENTS
 See CATEGORIES
@@ -270,93 +288,109 @@ See SUMMARY
 See CALENDAR-COMPONENT")
 
   (function attachments
-    "
+    "Accessor to the attachments list of the component.
 
+See ATTACHMENT
 See DATE-COMPONENT
 See EMAIL-ALARM")
 
   (function categories
-    "
+    "Accessor to the category list of the component.
 
+See CATEGORY
 See DATE-COMPONENT")
 
   (function classification
-    "
+    "Accessor to the classification of the component.
 
+See CLASSIFICATION
 See DATE-COMPONENT")
 
   (function contacts
-    "
+    "Accessor to the contacts list of the component.
 
+See CONTACT
 See DATE-COMPONENT")
 
   (function created
-    "
+    "Accessor to the created date of the component.
 
+See CREATED
 See DATE-COMPONENT")
 
   (function exception-dates
-    "
+    "Accessor to the list of exception dates of the component.
 
+See EXCEPTION-DATE
 See DATE-COMPONENT")
 
   (function last-modification
-    "
+    "Accessor to the last modification date of the component.
 
+See LAST-MODIFICATION
 See DATE-COMPONENT
 See TIME-ZONE")
 
   (function organizer
-    "
+    "Accessor to the organizer of the component.
 
+See ORGANIZER
 See DATE-COMPONENT
 See FREE/BUSY")
 
   (function recurrence-id
-    "
+    "Accessor to the recurrence ID of the component.
 
+See RECURRENCE-ID
 See DATE-COMPONENT")
 
   (function recurrence-dates
-    "
+    "Accessor to the list of recurrence dates of the component.
 
+See RECURRENCE-DATE
 See DATE-COMPONENT
 See TIME-ZONE-COMPONENT")
 
   (function recurrence-rule
-    "
+    "Accessor to the recurrence rule descriptor of the component.
 
+See RECURRENCE-RULE
 See DATE-COMPONENT
 See TIME-ZONE-COMPONENT")
 
   (function related
-    "
+    "Accessor to the related entity of the component.
 
+See RELATED
 See DATE-COMPONENT")
 
   (function resources
-    "
+    "Accessor to the list of resources of the component.
 
+See RESOURCES
 See DATE-COMPONENT")
 
   (function sequence-number
-    "
+    "Accessor to the sequence number of the component.
 
+See SEQUENCE-NUMBER
 See DATE-COMPONENT")
 
   (function status
-    "
+    "Accessor to the status of the component.
 
+See STATUS
 See DATE-COMPONENT")
 
   (function summary
-    "
+    "Accessor to the summary of the component.
 
+See SUMMARY
 See DATE-COMPONENT
 See EMAIL-ALARM")
 
   (type task-component
-    "
+    "This is a mixin class for common properties in subclasses.
 
 See DESCRIPTION
 See DURATION
@@ -366,34 +400,78 @@ See PRIORITY
 See DATE-COMPONENT")
 
   (function description
-    "
+    "Accessor to the description of the component.
 
+See DESCRIPTION
 See TASK-COMPONENT
 See DISPLAY-ALARM
 See EMAIL-ALARM")
 
   (function duration
-    "
+    "Accessor to the duration of the component.
 
+See DURATION
 See TASK-COMPONENT")
 
   (function geographic-location
-    "
+    "Accessor to the geographic location of the component.
 
+See GEOGRAPHIC-LOCATION
 See TASK-COMPONENT")
 
   (function location
-    "
+    "Accessor to the non-geographic location of the component.
 
+See LOCATION
 See TASK-COMPONENT")
 
   (function priority
-    "
+    "Accessor to the priority of the component.
 
+See PRIORITY
 See TASK-COMPONENT")
 
   (type event
-    "
+    "Component for a generic event kind of object in a calendar.
+
+From RFC5545:
+  A VEVENT calendar component is a grouping of
+  component properties, possibly including VALARM calendar
+  components, that represents a scheduled amount of time on a
+  calendar.  For example, it can be an activity; such as a one-hour
+  long, department meeting from 8:00 AM to 9:00 AM, tomorrow.
+  Generally, an event will take up time on an individual calendar.
+  Hence, the event will appear as an opaque interval in a search for
+  busy time.  Alternately, the event can have its Time Transparency
+  set to TRANSPARENT in order to prevent blocking of the event in
+  searches for busy time.
+
+  The VEVENT is also the calendar component used to specify an
+  anniversary or daily reminder within a calendar.  These events
+  have a DATE value type for the DTSTART property instead of the
+  default value type of DATE-TIME.  If such a VEVENT has a DTEND
+  property, it MUST be specified as a DATE value also.  The
+  anniversary type of VEVENT can span more than one date (i.e.,
+  DTEND property value is set to a calendar date after the
+  DTSTART property value).  If such a VEVENT has a DURATION
+  property, it MUST be specified as a dur-day or dur-week value.
+
+  The DTSTART property for a VEVENT specifies the inclusive
+  start of the event.  For recurring events, it also specifies the
+  very first instance in the recurrence set.  The DTEND property
+  for a VEVENT calendar component specifies the non-inclusive end
+  of the event.  For cases where a VEVENT calendar component
+  specifies a DTSTART property with a DATE value type but no
+  DTEND nor DURATION property, the event's duration is taken to
+  be one day.  For cases where a VEVENT calendar component
+  specifies a DTSTART property with a DATE-TIME value type but no
+  DTEND property, the event ends on the same calendar date and
+  time of day specified by the DTSTART property.
+
+  The VEVENT calendar component cannot be nested within another
+  calendar component.  However, VEVENT calendar components can be
+  related to each other or to a VTODO or to a VJOURNAL calendar
+  component with the RELATED-TO property.
 
 See TRANSPARENCY
 See END
@@ -401,18 +479,36 @@ See DURATION
 See TASK-COMPONENT")
 
   (function transparency
-    "
+    "Accessor to the transparency of the component.
 
+See TRANSPARENCY
 See EVENT")
 
   (function end
-    "
+    "Accessor to the end date of the component.
 
+See END
 See EVENT
 See FREE/BUSY")
 
   (type todo
-    "
+    "Component representing a todo item in a calendar.
+
+From RFC5545:
+  A VTODO calendar component is a grouping of component
+  properties and possibly VALARM calendar components that
+  represent an action-item or assignment.  For example, it can be
+  used to represent an item of work assigned to an individual; such
+  as \"turn in travel expense today\".
+
+  The VTODO calendar component cannot be nested within another
+  calendar component.  However, VTODO calendar components can be
+  related to each other or to a VEVENT or to a VJOURNAL calendar
+  component with the RELATED-TO property.
+
+  A VTODO calendar component without the DTSTART and DUE (or
+  DURATION) properties specifies a to-do that will be associated
+  with each successive calendar date, until it is completed.
 
 See COMPLETED
 See COMPLETENESS
@@ -421,27 +517,109 @@ See DURATION
 See TASK-COMPONENT")
 
   (function completed
-    "
+    "Accessor to whether the component is completed or not.
 
+See COMPLETED
 See TODO")
 
   (function completeness
-    "
+    "Accessor to the completeness percentage of the component.
 
+See COMPLETENESS
 See TODO")
 
   (function due
-    "
+    "Accessor to the due date of the component-
 
+See DUE
 See TODO")
 
   (type journal
-    "
+    "Component describing a generic journal entry in a calendar.
+
+From RFC5545:
+  A VJOURNAL calendar component is a grouping of
+  component properties that represent one or more descriptive text
+  notes associated with a particular calendar date.  The DTSTART
+  property is used to specify the calendar date with which the
+  journal entry is associated.  Generally, it will have a DATE value
+  data type, but it can also be used to specify a DATE-TIME value
+  data type.  Examples of a journal entry include a daily record of
+  a legislative body or a journal entry of individual telephone
+  contacts for the day or an ordered list of accomplishments for the
+  day.  The VJOURNAL calendar component can also be used to
+  associate a document with a calendar date.
+
+  The VJOURNAL calendar component does not take up time on a
+  calendar.  Hence, it does not play a role in free or busy time
+  searches -- it is as though it has a time transparency value of
+  TRANSPARENT.  It is transparent to any such searches.
+
+  The VJOURNAL calendar component cannot be nested within another
+  calendar component.  However, VJOURNAL calendar components can
+  be related to each other or to a VEVENT or to a VTODO calendar
+  component, with the RELATED-TO property.
 
 See DATE-COMPONENT")
 
   (type free/busy
-    "
+    "Component to describe a region of time during which a person is free or busy.
+
+From RFC5545:
+  A VFREEBUSY calendar component is a grouping of
+  component properties that represents either a request for free or
+  busy time information, a reply to a request for free or busy time
+  information, or a published set of busy time information.
+
+  When used to request free/busy time information, the ATTENDEE
+  property specifies the calendar users whose free/busy time is
+  being requested; the ORGANIZER property specifies the calendar
+  user who is requesting the free/busy time; the DTSTART and
+  DTEND properties specify the window of time for which the free/
+  busy time is being requested; the UID and DTSTAMP properties
+  are specified to assist in proper sequencing of multiple free/busy
+  time requests.
+
+  When used to reply to a request for free/busy time, the ATTENDEE
+  property specifies the calendar user responding to the free/busy
+  time request; the ORGANIZER property specifies the calendar user
+  that originally requested the free/busy time; the FREEBUSY
+  property specifies the free/busy time information (if it exists);
+  and the UID and DTSTAMP properties are specified to assist in
+  proper sequencing of multiple free/busy time replies.
+
+  When used to publish busy time, the ORGANIZER property specifies
+  the calendar user associated with the published busy time; the
+  DTSTART and DTEND properties specify an inclusive time window
+  that surrounds the busy time information; the FREEBUSY property
+  specifies the published busy time information; and the DTSTAMP
+  property specifies the DATE-TIME that iCalendar object was
+  created.
+
+  The VFREEBUSY calendar component cannot be nested within another
+  calendar component.  Multiple VFREEBUSY calendar components can
+  be specified within an iCalendar object.  This permits the
+  grouping of free/busy information into logical collections, such
+  as monthly groups of busy time information.
+
+  The VFREEBUSY calendar component is intended for use in
+  iCalendar object methods involving requests for free time,
+  requests for busy time, requests for both free and busy, and the
+  associated replies.
+
+  Free/Busy information is represented with the FREEBUSY property.
+  This property provides a terse representation of time periods.
+  One or more FREEBUSY properties can be specified in the
+  VFREEBUSY calendar component.
+
+  When present in a VFREEBUSY calendar component, the DTSTART
+  and DTEND properties SHOULD be specified prior to any FREEBUSY
+  properties.
+
+  The recurrence properties (RRULE, RDATE, EXDATE) are not
+  permitted within a VFREEBUSY calendar component.  Any recurring
+  events are resolved into their individual busy time periods using
+  the FREEBUSY property.
 
 See END
 See PERIODS
@@ -450,17 +628,198 @@ See CONTACT
 See CALENDAR-COMPONENT")
 
   (function periods
-    "
+    "Accessor to the list of free/busy periods of the component.
 
+See FREE/BUSY-PERIOD
 See FREE/BUSY")
 
   (function contact
-    "
+    "Accessor to the contact of the component.
 
+See CONTACT
 See FREE/BUSY")
 
   (type time-zone
-    "
+    "Component to describe a grouping of parts to describe a time zone.
+
+From RFC5545:
+  A time zone is unambiguously defined by the set of time
+  measurement rules determined by the governing body for a given
+  geographic area.  These rules describe, at a minimum, the base
+  offset from UTC for the time zone, often referred to as the
+  Standard Time offset.  Many locations adjust their Standard Time
+  forward or backward by one hour, in order to accommodate seasonal
+  changes in number of daylight hours, often referred to as Daylight
+  Saving Time.  Some locations adjust their time by a fraction of an
+  hour.  Standard Time is also known as Winter Time.  Daylight
+  Saving Time is also known as Advanced Time, Summer Time, or Legal
+  Time in certain countries.  The following table shows the changes
+  in time zone rules in effect for New York City starting from 1967.
+  Each line represents a description or rule for a particular
+  observance.
+
+                     Effective Observance Rule
+
+     +-----------+--------------------------+--------+--------------+
+     | Date      | (Date-Time)              | Offset | Abbreviation |
+     +-----------+--------------------------+--------+--------------+
+     | 1967-1973 | last Sun in Apr, 02:00   | -0400  | EDT          |
+     |           |                          |        |              |
+     | 1967-2006 | last Sun in Oct, 02:00   | -0500  | EST          |
+     |           |                          |        |              |
+     | 1974-1974 | Jan 6, 02:00             | -0400  | EDT          |
+     |           |                          |        |              |
+     | 1975-1975 | Feb 23, 02:00            | -0400  | EDT          |
+     |           |                          |        |              |
+     | 1976-1986 | last Sun in Apr, 02:00   | -0400  | EDT          |
+     |           |                          |        |              |
+     | 1987-2006 | first Sun in Apr, 02:00  | -0400  | EDT          |
+     |           |                          |        |              |
+     | 2007-*    | second Sun in Mar, 02:00 | -0400  | EDT          |
+     |           |                          |        |              |
+     | 2007-*    | first Sun in Nov, 02:00  | -0500  | EST          |
+     +-----------+--------------------------+--------+--------------+
+
+   Note: The specification of a global time zone registry is not
+     addressed by this document and is left for future study.
+     However, implementers may find the TZ database [TZDB] a useful
+     reference.  It is an informal, public-domain collection of time
+     zone information, which is currently being maintained by
+     volunteer Internet participants, and is used in several
+     operating systems.  This database contains current and
+     historical time zone information for a wide variety of
+     locations around the globe; it provides a time zone identifier
+     for every unique time zone rule set in actual use since 1970,
+     with historical data going back to the introduction of standard
+     time.
+
+  Interoperability between two calendaring and scheduling
+  applications, especially for recurring events, to-dos or journal
+  entries, is dependent on the ability to capture and convey date
+  and time information in an unambiguous format.  The specification
+  of current time zone information is integral to this behavior.
+
+  If present, the VTIMEZONE calendar component defines the set of
+  Standard Time and Daylight Saving Time observances (or rules) for
+  a particular time zone for a given interval of time.  The
+  VTIMEZONE calendar component cannot be nested within other
+  calendar components.  Multiple VTIMEZONE calendar components can
+  exist in an iCalendar object.  In this situation, each VTIMEZONE
+  MUST represent a unique time zone definition.  This is necessary
+  for some classes of events, such as airline flights, that start in
+  one time zone and end in another.
+
+  The VTIMEZONE calendar component MUST include the TZID
+  property and at least one definition of a STANDARD or DAYLIGHT
+  sub-component.  The STANDARD or DAYLIGHT sub-component MUST
+  include the DTSTART, TZOFFSETFROM, and TZOFFSETTO
+  properties.
+
+  An individual VTIMEZONE calendar component MUST be specified for
+  each unique TZID parameter value specified in the iCalendar
+  object.  In addition, a VTIMEZONE calendar component, referred
+  to by a recurring calendar component, MUST provide valid time zone
+  information for all recurrence instances.
+
+  Each VTIMEZONE calendar component consists of a collection of
+  one or more sub-components that describe the rule for a particular
+  observance (either a Standard Time or a Daylight Saving Time
+  observance).  The STANDARD sub-component consists of a
+  collection of properties that describe Standard Time.  The
+  DAYLIGHT sub-component consists of a collection of properties
+  that describe Daylight Saving Time.  In general, this collection
+  of properties consists of:
+
+  *  the first onset DATE-TIME for the observance;
+
+  *  the last onset DATE-TIME for the observance, if a last onset is
+     known;
+
+  *  the offset to be applied for the observance;
+
+  *  a rule that describes the day and time when the observance
+     takes effect;
+
+  *  an optional name for the observance.
+
+  For a given time zone, there may be multiple unique definitions of
+  the observances over a period of time.  Each observance is
+  described using either a STANDARD or DAYLIGHT sub-component.
+  The collection of these sub-components is used to describe the
+  time zone for a given period of time.  The offset to apply at any
+  given time is found by locating the observance that has the last
+  onset date and time before the time in question, and using the
+  offset value from that observance.
+
+  The top-level properties in a VTIMEZONE calendar component are:
+
+  The mandatory TZID property is a text value that uniquely
+  identifies the VTIMEZONE calendar component within the scope of
+  an iCalendar object.
+
+  The optional LAST-MODIFIED property is a UTC value that
+  specifies the date and time that this time zone definition was
+  last updated.
+
+  The optional TZURL property is a url value that points to a
+  published VTIMEZONE definition.  TZURL SHOULD refer to a
+  resource that is accessible by anyone who might need to interpret
+  the object.  This SHOULD NOT normally be a file URL or other URL
+  that is not widely accessible.
+
+  The collection of properties that are used to define the
+  STANDARD and DAYLIGHT sub-components include:
+
+  The mandatory DTSTART property gives the effective onset date
+  and local time for the time zone sub-component definition.
+  DTSTART in this usage MUST be specified as a date with a local
+  time value.
+
+  The mandatory TZOFFSETFROM property gives the UTC offset that is
+  in use when the onset of this time zone observance begins.
+  TZOFFSETFROM is combined with DTSTART to define the effective
+  onset for the time zone sub-component definition.  For example,
+  the following represents the time at which the observance of
+  Standard Time took effect in Fall 1967 for New York City:
+
+   DTSTART:19671029T020000
+
+   TZOFFSETFROM:-0400
+
+  The mandatory TZOFFSETTO property gives the UTC offset for the
+  time zone sub-component (Standard Time or Daylight Saving Time)
+  when this observance is in use.
+
+  The optional TZNAME property is the customary name for the time
+  zone.  This could be used for displaying dates.
+
+  The onset DATE-TIME values for the observance defined by the time
+  zone sub-component is defined by the DTSTART, RRULE, and
+  RDATE properties.
+
+  The RRULE property defines the recurrence rule for the onset of
+  the observance defined by this time zone sub-component.  Some
+  specific requirements for the usage of RRULE for this purpose
+  include:
+
+  *  If observance is known to have an effective end date, the
+     UNTIL recurrence rule parameter MUST be used to specify the
+     last valid onset of this observance (i.e., the UNTIL DATE-TIME
+     will be equal to the last instance generated by the recurrence
+     pattern).  It MUST be specified in UTC time.
+
+  *  The DTSTART and the TZOFFSETFROM properties MUST be used
+     when generating the onset DATE-TIME values (instances) from the
+     RRULE.
+
+  The RDATE property can also be used to define the onset of the
+  observance by giving the individual onset date and times.  RDATE
+  in this usage MUST be specified as a date with local time value,
+  relative to the UTC offset specified in the TZOFFSETFROM
+  property.
+
+  The optional COMMENT property is also allowed for descriptive
+  explanatory text.
 
 See UID
 See LAST-MODIFICATION
@@ -469,7 +828,119 @@ See COMPONENT
 See COMPONENT-CONTAINER")
 
   (type alarm
-    "
+    "Component to describe an alert or alarm that should be sent out.
+
+Since there are three distinct grouping of properties for alarms in a
+calendar, in iClendar the alarms are split into three distinct subclasses:
+
+  AUDIO-ALARM
+  DISPLAY-ALARM
+  EMAIL-ALARM
+
+You should use these classes instead of the ALARM superclass.
+
+From RFC5545:
+  A VALARM calendar component is a grouping of
+  component properties that is a reminder or alarm for an event or a
+  to-do.  For example, it may be used to define a reminder for a
+  pending event or an overdue to-do.
+
+  The VALARM calendar component MUST include the ACTION and
+  TRIGGER properties.  The ACTION property further constrains
+  the VALARM calendar component in the following ways:
+
+  When the action is AUDIO, the alarm can also include one and
+  only one ATTACH property, which MUST point to a sound resource,
+  which is rendered when the alarm is triggered.
+
+  When the action is DISPLAY, the alarm MUST also include a
+  DESCRIPTION property, which contains the text to be displayed
+  when the alarm is triggered.
+
+  When the action is EMAIL, the alarm MUST include a DESCRIPTION
+  property, which contains the text to be used as the message body,
+  a SUMMARY property, which contains the text to be used as the
+  message subject, and one or more ATTENDEE properties, which
+  contain the email address of attendees to receive the message.  It
+  can also include one or more ATTACH properties, which are
+  intended to be sent as message attachments.  When the alarm is
+  triggered, the email message is sent.
+
+  The VALARM calendar component MUST only appear within either a
+  VEVENT or VTODO calendar component.  VALARM calendar
+  components cannot be nested.  Multiple mutually independent
+  VALARM calendar components can be specified for a single
+  VEVENT or VTODO calendar component.
+
+  The TRIGGER property specifies when the alarm will be triggered.
+  The TRIGGER property specifies a duration prior to the start of
+  an event or a to-do.  The TRIGGER edge may be explicitly set to
+  be relative to the START or END of the event or to-do with the
+  RELATED parameter of the TRIGGER property.  The TRIGGER
+  property value type can alternatively be set to an absolute
+  calendar date with UTC time.
+
+  In an alarm set to trigger on the START of an event or to-do,
+  the DTSTART property MUST be present in the associated event or
+  to-do.  In an alarm in a VEVENT calendar component set to
+  trigger on the END of the event, either the DTEND property
+  MUST be present, or the DTSTART and DURATION properties MUST
+  both be present.  In an alarm in a VTODO calendar component set
+  to trigger on the END of the to-do, either the DUE property
+  MUST be present, or the DTSTART and DURATION properties MUST
+  both be present.
+
+  The alarm can be defined such that it triggers repeatedly.  A
+  definition of an alarm with a repeating trigger MUST include both
+  the DURATION and REPEAT properties.  The DURATION property
+  specifies the delay period, after which the alarm will repeat.
+  The REPEAT property specifies the number of additional
+  repetitions that the alarm will be triggered.  This repetition
+  count is in addition to the initial triggering of the alarm.  Both
+  of these properties MUST be present in order to specify a
+  repeating alarm.  If one of these two properties is absent, then
+  the alarm will not repeat beyond the initial trigger.
+
+  The ACTION property is used within the VALARM calendar
+  component to specify the type of action invoked when the alarm is
+  triggered.  The VALARM properties provide enough information for
+  a specific action to be invoked.  It is typically the
+  responsibility of a Calendar User Agent (CUA) to deliver the
+  alarm in the specified fashion.  An ACTION property value of
+  AUDIO specifies an alarm that causes a sound to be played to alert
+  the user; DISPLAY specifies an alarm that causes a text message to
+  be displayed to the user; and EMAIL specifies an alarm that causes
+  an electronic email message to be delivered to one or more email
+  addresses.
+
+  In an AUDIO alarm, if the optional ATTACH property is included,
+  it MUST specify an audio sound resource.  The intention is that
+  the sound will be played as the alarm effect.  If an ATTACH
+  property is specified that does not refer to a sound resource, or
+  if the specified sound resource cannot be rendered (because its
+  format is unsupported, or because it cannot be retrieved), then
+  the CUA or other entity responsible for playing the sound may
+  choose a fallback action, such as playing a built-in default
+  sound, or playing no sound at all.
+
+  In a DISPLAY alarm, the intended alarm effect is for the text
+  value of the DESCRIPTION property to be displayed to the user.
+
+  In an EMAIL alarm, the intended alarm effect is for an email
+  message to be composed and delivered to all the addresses
+  specified by the ATTENDEE properties in the VALARM calendar
+  component.  The DESCRIPTION property of the VALARM calendar
+  component MUST be used as the body text of the message, and the
+  SUMMARY property MUST be used as the subject text.  Any ATTACH
+  properties in the VALARM calendar component SHOULD be sent as
+  attachments to the message.
+
+     Note: Implementations should carefully consider whether they
+     accept alarm components from untrusted sources, e.g., when
+     importing calendar objects from external sources.  One
+     reasonable policy is to always ignore alarm components that the
+     calendar user has not set herself, or at least ask for
+     confirmation in such a case.
 
 See ACTION
 See TRIGGER
@@ -478,39 +949,43 @@ See REPEAT
 See COMPONENT")
 
   (function action
-    "
+    "Accessor to the action of the component.
 
+See ACTION
 See ALARM")
 
   (function trigger
-    "
+    "Accessor to the trigger of the component.
 
+See TRIGGER
 See ALARM")
 
   (function repeat
-    "
+    "Accessor to the repeat count of the component.
 
+See REPEAT
 See ALARM")
 
   (type audio-alarm
-    "
+    "An alarm that plays an audio clip.
 
+See ATTACHMENT
 See ALARM")
 
   (function attachment
-    "
+    "Accessor to the audio clip that is played for the audio alarm.
 
 See ATTACHMENT
 See AUDIO-ALARM")
 
   (type display-alarm
-    "
+    "An alarm that displays a note.
 
 See DESCRIPTION
 See ALARM")
 
   (type email-alarm
-    "
+    "An alarm that sends an email.
 
 See ATTACHMENTS
 See ATTENDEE
@@ -519,12 +994,21 @@ See SUMMARY
 See ALARM")
 
   (function attendee
-    "
+    "Accessor to the attendee of the component.
 
+See ATTENDEE
 See EMAIL-ALARM")
 
   (type time-zone-component
-    "
+    "This is a child component describing a part of a time zone.
+
+Since time zone components can take on two forms, iClendar implements the
+following two subclasses that should be used instead of this:
+
+  TIME-ZONE-STANDARD
+  TIME-ZONE-DAYLIGHT
+
+Please see TIME-ZONE for a full description.
 
 See COMMENTS
 See START
@@ -533,35 +1017,41 @@ See RECURRENCE-RULE
 See OFFSET-TO
 See OFFSET-FROM
 See TZ-NAMES
+See TIME-ZONE
+See TIME-ZONE-STANDARD
+See TIME-ZONE-DAYLIGHT
 See COMPONENT")
 
   (function offset-to
-    "
+    "Accessor to what this component is offset to.
 
+See OFFSET-TO
 See TIME-ZONE-COMPONENT")
 
   (function offset-from
-    "
+    "Accessor to what this component is offset from.
 
+See OFFSET-FROM
 See TIME-ZONE-COMPONENT")
 
   (function tz-names
-    "
+    "Accessor to the list of time zone names of the component.
 
+See TZNAME
 See TIME-ZONE-COMPONENT")
 
   (type time-zone-standard
-    "
+    "Standard time zone component description.
 
 See TIME-ZONE-COMPONENT")
 
   (type time-zone-daylight
-    "
+    "Daylight savings time zone component description.
 
-See TIME-ZONE-DAYLIGHT")
+See TIME-ZONE-COMPONENT")
 
   (type x-component
-    "
+    "This is a component to describe X-prefixed, extension components.
 
 See IDENTIFIER
 See COMPONENT"))
