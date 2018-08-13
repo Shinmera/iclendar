@@ -67,7 +67,7 @@
 
 (define-print-object period NIL "~a - ~a" period-start period-limit)
 
-(defstruct (recurrence (:constructor make-recurrency (frequency &key end-date count interval by-seconds by-minutes by-hours by-days by-month-days by-year-days by-weeks by-months by-set-pos week-start)))
+(defstruct (recurrence (:constructor make-recurrence (frequency &key end-date count interval by-seconds by-minutes by-hours by-days by-month-days by-year-days by-weeks by-months by-set-pos week-start)))
   (frequency NIL :type (member :secondly :minutely :hourly :daily :weekly :monthly :yearly))
   (end-date NIL :type (or null date date-time))
   (count NIL :type (or null (integer 0)))
