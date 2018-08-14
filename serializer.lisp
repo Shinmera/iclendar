@@ -87,7 +87,7 @@
   (format stream "~@[;BYMONTH=~{~a~^,~}~]" (recurrence-by-months object))
   (format stream "~@[;BYSETPOS=~{~a~^,~}~]" (recurrence-by-set-pos object))
   (format stream "~@[;WKST=~a~]" (ecase (recurrence-week-start object)
-                                   (:monday "MO") (:tuesday "TU") (:wednesday "WE")
+                                   ((NIL)) (:monday "MO") (:tuesday "TU") (:wednesday "WE")
                                    (:thursday "TH") (:friday "FR") (:saturday "SA") (:sunday "SU"))))
 
 (defmethod serialize-object ((object utc-offset) stream)
