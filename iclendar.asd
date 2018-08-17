@@ -10,7 +10,9 @@
   :author "Nicolas Hafner <shinmera@tymoon.eu>"
   :maintainer "Nicolas Hafner <shinmera@tymoon.eu>"
   :description "An iCalendar format lirbary."
-  :homepage "https://github.com/Shinmera/iclendar"
+  :homepage "https://Shinmera.github.io/iclendar/"
+  :bug-tracker "https://github.com/Shinmera/iclendar/issues"
+  :source-control (:git "https://github.com/Shinmera/iclendar.git")
   :serial T
   :components ((:file "package")
                (:file "toolkit")
