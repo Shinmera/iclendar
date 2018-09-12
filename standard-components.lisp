@@ -7,7 +7,7 @@
 (in-package #:org.shirakumo.iclendar)
 
 (defclass component-container ()
-  ((components :initform NIL :initarg :components :reader components)))
+  ((components :initform NIL :initarg :components :accessor components)))
 
 (define-component (calendar "VCALENDAR") (component-container)
   ((product :constraint :required :property product)
