@@ -11,9 +11,10 @@
 
 (defmethod shared-initialize ((class serializable-class) slot-names &key (identifier NIL given))
   (declare (ignore slot-names))
-  (call-next-method)
-  (when given
-    (setf (slot-value class 'identifier) (if (consp identifier) (car identifier) identifier))))
+  (prog1 (call-next-method)
+    (when given
+      (setf (slot-value class 'identifier)
+            (if (consp identifier) (car identifier) identifier)))))
 
 (defmethod c2mop:finalize-inheritance :after ((class serializable-class))
   (unless (slot-boundp class 'identifier)
