@@ -12,6 +12,7 @@
 ;; KLUDGE: On ECL the direct slot types are computed in initialize-instance, before shared-initialize.
 ;;         At that stage the direct-superclasses slot is unbound in the class, leading to an error.
 ;;         We pre-set the superclass list here so that it is accessible early enough where we need it.
+#+ecl
 (defmethod initialize-instance :before ((class serializable-class) &key (direct-superclasses NIL direct-superclasses-p))
   (when direct-superclasses-p
     (setf (c2mop:class-direct-superclasses class) direct-superclasses)))
