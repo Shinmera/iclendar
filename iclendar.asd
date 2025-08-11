@@ -4,9 +4,9 @@
   :author "Yukari Hafner <shinmera@tymoon.eu>"
   :maintainer "Yukari Hafner <shinmera@tymoon.eu>"
   :description "An iCalendar format lirbary."
-  :homepage "https://Shinmera.github.io/iclendar/"
-  :bug-tracker "https://github.com/Shinmera/iclendar/issues"
-  :source-control (:git "https://github.com/Shinmera/iclendar.git")
+  :homepage "https://shinmera.com/docs/iclendar/"
+  :bug-tracker "https://shinmera.com/project/iclendar/issues"
+  :source-control (:git "https://shinmera.com/project/iclendar.git")
   :serial T
   :components ((:file "package")
                (:file "toolkit")
